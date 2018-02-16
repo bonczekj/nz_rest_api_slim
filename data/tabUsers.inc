@@ -13,7 +13,7 @@ class tabUsers extends dbTable
     protected $tabName = 'users';
 
     public function readAll(){
-        $querystr = "SELECT username, email, password, firstname, lastname FROM " . $this->tabName;
+        $querystr = "SELECT username, email, firstname, lastname FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
         return $stmt;
     }

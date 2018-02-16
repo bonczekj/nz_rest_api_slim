@@ -24,7 +24,7 @@ class tabCustomers extends dbTable
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession) VALUES (?, ?, ?)');
             $query->bindValue(1, $ico, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
-            $query->bindValue(2, $profession, PDO::PARAM_STR);
+            $query->bindValue(3, $profession, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

@@ -31,8 +31,16 @@ $app->post('/customers', function (Request $request, Response $response, array $
                     ->withHeader('Access-Control-Allow-Origin', '*');
 });
 
+$app->post('/customers/delete', function (Request $request, Response $response, array $args) {
+    $json = $request->getBody();
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    $tabCustomers = new tabCustomers();
+    $tabCustomers->delete($data['ico']);
+    return $response->withHeader('Content-Type', 'application/json')
+        ->withHeader('Access-Control-Allow-Origin', '*');
+});
 
-$app->post('/customerscreate', function (Request $request, Response $response, array $args) {
+$app->post('/customers/create', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabCustomers = new tabCustomers();
@@ -52,11 +60,3 @@ $app->post('/customerscreate', function (Request $request, Response $response, a
     }
 });
 
-$app->delete('/customers', function (Request $request, Response $response, array $args) {
-    $json = $request->getBody();
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-    $tabCustomers = new tabCustomers();
-    $tabCustomers->update( $data['ico'], $data['name'], $data['profession']);
-    return $response->withHeader('Content-Type', 'application/json')
-        ->withHeader('Access-Control-Allow-Origin', '*');
-});
