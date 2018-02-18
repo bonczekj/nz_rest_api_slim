@@ -21,6 +21,7 @@ class tabDocuments extends dbTable
     function insert($type, $filename, $description, $expiration)
     {
         try {
+            $filename = basename($filename);
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (type, filename, description, expiration) VALUES (?, ?, ?, ?)');
             $query->bindValue(1, $type, PDO::PARAM_STR);
             $query->bindValue(2, $filename, PDO::PARAM_STR);
@@ -45,6 +46,7 @@ class tabDocuments extends dbTable
 
     function update($id, $type, $filename, $description, $expiration)
     {
+        $filename = basename($filename);
         $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET type = ?, filename = ?, description = ?, expiration = ? where id = ?');
         $query->bindParam(1, $type, PDO::PARAM_STR, 10);
         $query->bindParam(2, $filename, PDO::PARAM_STR, 255);

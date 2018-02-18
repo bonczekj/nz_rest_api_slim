@@ -10,3 +10,40 @@ CREATE TABLE `doctype` (
   `description` varchar(255) COLLATE utf8_czech_ci DEFAULT NULL,
   PRIMARY KEY (`type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+CREATE TABLE `documents` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `type` varchar(20) COLLATE utf8_czech_ci NOT NULL,
+  `filename` varchar(255) COLLATE utf8_czech_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_czech_ci DEFAULT NULL,
+  `expiration` date DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+CREATE TABLE `offers` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) COLLATE utf8_czech_ci NOT NULL,
+  `customer` varchar(100) COLLATE utf8_czech_ci DEFAULT NULL,
+  `processdate` date DEFAULT NULL,
+  `processtime` time DEFAULT NULL,
+  `deliverytype` varchar(45) COLLATE utf8_czech_ci DEFAULT NULL,
+  `errand` varchar(45) COLLATE utf8_czech_ci DEFAULT NULL,
+  `winprice` int(11) DEFAULT NULL,
+  `price` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+CREATE TABLE `offersdocuments` (
+  `idoffer` int(11) NOT NULL,
+  `iddocument` int(11) NOT NULL,
+  PRIMARY KEY (`idoffer`,`iddocument`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
+
+CREATE TABLE `users` (
+  `username` varchar(40) COLLATE utf8_czech_ci NOT NULL,
+  `email` varchar(255) COLLATE utf8_czech_ci NOT NULL,
+  `password` varchar(32) COLLATE utf8_czech_ci NOT NULL,
+  `firstname` varchar(45) COLLATE utf8_czech_ci NOT NULL,
+  `lastname` varchar(80) COLLATE utf8_czech_ci NOT NULL,
+  PRIMARY KEY (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
