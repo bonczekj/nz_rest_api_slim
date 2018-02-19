@@ -14,72 +14,94 @@ include './data/tabUsers.inc';
 $app->get('/users', function (Request $request, Response $response, array $args) {
 
     $tabUsers = new tabUsers();
-    $stmt = $tabUsers->readAll();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $response->getBody()->write(json_encode($data));
-    return $response->withHeader('Content-Type', 'application/json')
-        //->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
-
-$app->post('/users/list', function (Request $request, Response $response, array $args) {
-
-    $tabUsers = new tabUsers();
-    $stmt = $tabUsers->readAll();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    $response->getBody()->write(json_encode($data));
-    return $response->withHeader('Content-Type', 'application/json')
-        //->withHeader('Access-Control-Allow-Origin', '*')
-        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-});
-
-$app->post('/users', function (Request $request, Response $response, array $args) {
-    $json = $request->getBody();
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-    $tabUsers= new tabUsers();
     try {
-        $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        $stmt = $tabUsers->readAll();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withHeader('Access-Control-Allow-Origin', '*')
-                        ->withStatus(201, 'Data uložena');
-
+                        ->withStatus(200, 'OK');
     }
     catch(Exception $e)
     {
         return $response->withHeader('Content-Type', 'application/json')
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withStatus(202, 'Chyba při zpracování dat');
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
+        //->withHeader('Access-Control-Allow-Origin', '*')
+        //->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        //->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
+$app->post('/users/list', function (Request $request, Response $response, array $args) {
+    try {
+        $tabUsers = new tabUsers();
+        $stmt = $tabUsers->readAll();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(200, 'OK');
+            //->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+            //->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
+});
+
+$app->post('/users', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabUsers= new tabUsers();
+        $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        return $response->withHeader('Content-Type', 'application/json')
+                        //->withHeader('Access-Control-Allow-Origin', '*')
+                        ->withStatus(200, 'Saved');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withStatus(460, 'Error')
+                        ->withBody($e->getMessage());
     }
 });
 
 $app->post('/users/delete', function (Request $request, Response $response, array $args) {
-    $json = $request->getBody();
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-    $tabUsers= new tabUsers();
-    $tabUsers->delete( $data['email'] );
-    return $response->withHeader('Content-Type', 'application/json')
-        ->withHeader('Access-Control-Allow-Origin', '*');
-});
-
-$app->post('/users/create', function (Request $request, Response $response, array $args) {
-    $json = $request->getBody();
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-    $tabUsers= new tabUsers();
     try {
-        $tabUsers->insert( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabUsers= new tabUsers();
+        $tabUsers->delete( $data['email'] );
         return $response->withHeader('Content-Type', 'application/json')
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withStatus(200);
+                        ->withStatus(200, 'Deleted');
     }
     catch(Exception $e)
     {
-        $response->setStatus(501);
-        $response->getBody()->write($e->getMessage());
         return $response->withHeader('Content-Type', 'application/json')
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withStatus(501);
+            //->withHeader('Access-Control-Allow-Origin', '*')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+
+    }
+});
+
+$app->post('/users/create', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabUsers= new tabUsers();
+        $tabUsers->insert( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'Created');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
     }
 });
 
