@@ -25,17 +25,20 @@ $app->get('/documents', function (Request $request, Response $response, array $a
                     ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-$app->post('/document', function (Request $request, Response $response, array $args) {
+$app->post('/documents', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $id = $data['id'];
     $tabDocuments->update( $data['id'], $data['type'], $data['filename'], $data['description'], $data['expiration']);
     return $response->withHeader('Content-Type', 'application/json')
-                    ->withHeader('Access-Control-Allow-Origin', '*');
+                    ->withHeader('Access-Control-Allow-Origin', '*, http://localhost:3000')
+                    ->withHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Authorization, Origin, x-requested-with, Content-Range, Content-Disposition, Content-Description')
+                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
+                    ->withStatus(201, 'Data saved');
 });
 
-$app->post('/documentdelete', function (Request $request, Response $response, array $args) {
+$app->post('/documents/delete', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
@@ -44,7 +47,7 @@ $app->post('/documentdelete', function (Request $request, Response $response, ar
         ->withHeader('Access-Control-Allow-Origin', '*');
 });
 
-$app->post('/documentcreate', function (Request $request, Response $response, array $args) {
+$app->post('/documents/create', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();

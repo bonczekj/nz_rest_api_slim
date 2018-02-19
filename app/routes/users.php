@@ -18,21 +18,43 @@ $app->get('/users', function (Request $request, Response $response, array $args)
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
     $response->getBody()->write(json_encode($data));
     return $response->withHeader('Content-Type', 'application/json')
-                    ->withHeader('Access-Control-Allow-Origin', '*')
-                    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        //->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
-$app->post('/user', function (Request $request, Response $response, array $args) {
+$app->post('/users/list', function (Request $request, Response $response, array $args) {
+
+    $tabUsers = new tabUsers();
+    $stmt = $tabUsers->readAll();
+    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $response->getBody()->write(json_encode($data));
+    return $response->withHeader('Content-Type', 'application/json')
+        //->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+});
+
+$app->post('/users', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabUsers= new tabUsers();
-    $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
-    return $response->withHeader('Content-Type', 'application/json')
-        ->withHeader('Access-Control-Allow-Origin', '*');
+    try {
+        $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        return $response->withHeader('Content-Type', 'application/json')
+                        ->withHeader('Access-Control-Allow-Origin', '*')
+                        ->withStatus(201, 'Data uložena');
+
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withStatus(202, 'Chyba při zpracování dat');
+    }
 });
 
-$app->post('/userdelete', function (Request $request, Response $response, array $args) {
+$app->post('/users/delete', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabUsers= new tabUsers();
@@ -41,7 +63,7 @@ $app->post('/userdelete', function (Request $request, Response $response, array 
         ->withHeader('Access-Control-Allow-Origin', '*');
 });
 
-$app->post('/usercreate', function (Request $request, Response $response, array $args) {
+$app->post('/users/create', function (Request $request, Response $response, array $args) {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabUsers= new tabUsers();
