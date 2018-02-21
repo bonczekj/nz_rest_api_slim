@@ -12,6 +12,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 include './data/tabDocuments.inc';
 
 $app->get('/documents', function (Request $request, Response $response, array $args) {
+    try {
     $tabDocuments = new tabDocuments();
     $stmt = $tabDocuments->readAll();
     $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -19,71 +20,102 @@ $app->get('/documents', function (Request $request, Response $response, array $a
     //$response->headers->set('Content-Type', 'application/json');
     $response->getBody()->write(json_encode($data));
     //$response->write(json_encode($data));
-    return $response->withHeader('Content-Type', 'application/json')
-                    ->withHeader('Access-Control-Allow-Origin', '*')
-                    ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
 });
 
 $app->post('/documents', function (Request $request, Response $response, array $args) {
+    try {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $id = $data['id'];
     $tabDocuments->update( $data['id'], $data['type'], $data['filename'], $data['description'], $data['expiration']);
-    return $response->withHeader('Content-Type', 'application/json')
-                    ->withHeader('Access-Control-Allow-Origin', '*, http://localhost:3000')
-                    ->withHeader('Access-Control-Allow-Headers', 'Accept, Content-Type, Access-Control-Allow-Origin, Access-Control-Allow-Headers, Access-Control-Allow-Methods, Authorization, Origin, x-requested-with, Content-Range, Content-Disposition, Content-Description')
-                    ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, OPTIONS')
-                    ->withStatus(201, 'Data saved');
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
 });
 
 $app->post('/documents/delete', function (Request $request, Response $response, array $args) {
+    try {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $tabDocuments->delete($data['id']);
-    return $response->withHeader('Content-Type', 'application/json')
-        ->withHeader('Access-Control-Allow-Origin', '*');
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
 });
 
 $app->post('/documents/create', function (Request $request, Response $response, array $args) {
+    try {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $lastId = $tabDocuments->insert( $data['type'], $data['filename'], $data['description'], $data['expiration']);
     $response->getBody()->write(json_encode($lastId));
-    return $response->withHeader('Content-Type', 'application/json')
-                    ->withHeader('Access-Control-Allow-Origin', '*')
-                    ->withHeader('Access-Control-Allow-Origin', '*');
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
 });
 
 $app->post('/file', function (Request $request, Response $response, array $args) {
-    $directory = getcwd().'\uploads';
-    $files = $request->getUploadedFiles();
-    foreach ($files as &$value) {
-        $uploadedFile = $value;
+    try {
+        $directory = getcwd().'\uploads';
+        $files = $request->getUploadedFiles();
+        foreach ($files as &$value) {
+            $uploadedFile = $value;
+        }
+
+        //$file = $files['file'];
+
+        if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
+            $fileName = moveUploadedFile($directory, $uploadedFile);
+            return $response->withJson([
+                'result' => [
+                    'fileName' => $fileName
+                ],
+            ])->withStatus(200, 'OK')
+              ->withHeader('Content-Type', 'application/json');
+        }else {
+            return $response
+                ->withJson([
+                    'error' => 'Nothing was uploaded'
+                ])->withStatus(460)
+                  ->withHeader('Content-Type', 'application/json');
+        }
     }
-
-    //$file = $files['file'];
-
-    if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-        $fileName = moveUploadedFile($directory, $uploadedFile);
-        return $response->withJson([
-            'result' => [
-                'fileName' => $fileName
-            ],
-        ])->withStatus(200)
-          ->withHeader('Content-Type', 'application/json')
-          ->withHeader('Access-Control-Allow-Origin', '*');
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
     }
-
-    return $response
-        ->withJson([
-            'error' => 'Nothing was uploaded'
-        ])->withStatus(415)
-          ->withHeader('Content-Type', 'application/json')
-          ->withHeader('Access-Control-Allow-Origin', '*');
 });
 
 function moveUploadedFile($directory, $uploadedFile){

@@ -24,7 +24,7 @@ include './app/routes/documents.php';
 include './app/routes/doctype.php';
 include './app/routes/users.php';
 include './app/routes/customers.php';
-;include './app/routes/offers.php';
+include './app/routes/offers.php';
 include './app/routes/offersDocuments.php';
 
 $app->run();

@@ -58,7 +58,6 @@ $app->post('/users', function (Request $request, Response $response, array $args
         $tabUsers= new tabUsers();
         $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
         return $response->withHeader('Content-Type', 'application/json')
-                        //->withHeader('Access-Control-Allow-Origin', '*')
                         ->withStatus(200, 'Saved');
     }
     catch(Exception $e)
