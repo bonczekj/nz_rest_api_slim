@@ -86,10 +86,11 @@ $app->post('/customers/ares', function (Request $request, Response $response, ar
         $tabCustomers = new tabCustomers();
         $dataAres = $tabCustomers->readAres( $data['ico']);
         if ($dataAres['name'] == ''){
-
             $modifiedBody = $response->getBody();
             $modifiedBody->write($dataAres['status']);
-            return $response->withBody($modifiedBody)->withStatus(460, $dataAres['status']);
+            return $response->withBody($modifiedBody)->withStatus(460, $dataAres['status'])
+                            ->withHeader('Content-Type', 'text/html')
+                            ->withHeader('charset', 'utf-8');
         }
         $response->getBody()->write(json_encode($dataAres));
         return $response->withHeader('Content-Type', 'application/json')
