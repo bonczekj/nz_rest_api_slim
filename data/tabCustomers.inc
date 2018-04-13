@@ -15,8 +15,8 @@ class tabCustomers extends dbTable
 
     public function readAll(){
 
-        $ares = new ARES('05998468'); // Zadáte IČ
-        $data = $ares->getData();   // Získáte array s daty
+        //$ares = new ARES('05998468'); // Zadáte IČ
+        //$data = $ares->getData();   // Získáte array s daty
 
         $querystr = "SELECT ico, name, profession, address FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
