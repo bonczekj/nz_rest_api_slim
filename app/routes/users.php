@@ -12,7 +12,6 @@ use \Psr\Http\Message\ResponseInterface as Response;
 include './data/tabUsers.inc';
 
 $app->get('/users', function (Request $request, Response $response, array $args) {
-
     $tabUsers = new tabUsers();
     try {
         $stmt = $tabUsers->readAll();
