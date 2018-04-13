@@ -8,6 +8,7 @@
 
 include_once "./data/dbTable.inc";
 include_once "./data/Ares.inc";
+include_once "./data/aresMF.inc";
 
 class tabCustomers extends dbTable
 {
@@ -15,8 +16,8 @@ class tabCustomers extends dbTable
 
     public function readAll(){
 
-        $ares = new ARES('05998468'); // Zadáte IČ
-        $data = $ares->getData();   // Získáte array s daty
+        //$ares = new ARES('05998468'); // Zadáte IČ
+        //$data = $ares->getData();   // Získáte array s daty
 
         $querystr = "SELECT ico, name, profession, address FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
@@ -24,8 +25,10 @@ class tabCustomers extends dbTable
     }
 
     public function readAres($ico){
-        $ares = new ARES($ico); // Zadáte IČ
-        return $ares->getData();   // Získáte array s daty
+        //$ares = new ARES($ico); // Zadáte IČ
+        //return $ares->getData();   // Získáte array s daty
+        $aresMF = new aresMF($ico); // Zadáte IČ
+        return $aresMF->getData();   // Získáte array s daty
     }
 
     function insert($ico, $name, $profession, $address)

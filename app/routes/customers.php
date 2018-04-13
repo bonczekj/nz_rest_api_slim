@@ -85,8 +85,13 @@ $app->post('/customers/ares', function (Request $request, Response $response, ar
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabCustomers = new tabCustomers();
         $dataAres = $tabCustomers->readAres( $data['ico']);
+        if ($dataAres['name'] == ''){
+
+            $modifiedBody = $response->getBody();
+            $modifiedBody->write($dataAres['status']);
+            return $response->withBody($modifiedBody)->withStatus(460, $dataAres['status']);
+        }
         $response->getBody()->write(json_encode($dataAres));
-        $re = json_encode($dataAres);
         return $response->withHeader('Content-Type', 'application/json')
             ->withHeader('Accept', 'application/json')
             ->withStatus(200, 'OK');
