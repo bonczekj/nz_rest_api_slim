@@ -8,9 +8,14 @@
 
 class dbManager{
 
-    private $host = "localhost";
+    /*private $host = "localhost";
     private $db_name = "nz_db";
     private $username = "jirka";
+    private $password = "jirka";*/
+
+    private $host = "localhost";
+    private $db_name = "id4307761_en";
+    private $username = "id4307761_jirka";
     private $password = "jirka";
     private $conn;
 
