@@ -9,6 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require './vendor/autoload.php';
+//include './data/logger.inc';
 $container['upload_directory'] = __DIR__ . '/uploads';
 
 $app = new \Slim\App;

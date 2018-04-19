@@ -82,6 +82,8 @@ $app->post('/customers/create', function (Request $request, Response $response, 
 $app->post('/customers/ares', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabCustomers = new tabCustomers();
         $dataAres = $tabCustomers->readAres( $data['ico']);

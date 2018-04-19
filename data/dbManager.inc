@@ -8,16 +8,30 @@
 
 class dbManager{
 
-    /*private $host = "localhost";
-    private $db_name = "nz_db";
-    private $username = "jirka";
-    private $password = "jirka";*/
+    private $host = "";
+    private $db_name = "";
+    private $username = "";
+    private $password = "";
 
-    private $host = "localhost";
+    /*private $host = "localhost";
     private $db_name = "id4307761_en";
     private $username = "id4307761_jirka";
     private $password = "jirka";
-    private $conn;
+    private $conn;*/
+
+    public function __construct(){
+        if ($_SERVER['SERVER_NAME'] === "jiribonczek.000webhostapp.com"){
+            $this->host = "localhost";
+            $this->db_name = "id4307761_en";
+            $this->username = "id4307761_jirka";
+            $this->password = "jirka";
+        }else{
+            $this->host = "localhost";
+            $this->db_name = "nz_db";
+            $this->username = "jirka";
+            $this->password = "jirka";
+        }
+    }
 
     // get the dbManager connection
     public function getConnection(){

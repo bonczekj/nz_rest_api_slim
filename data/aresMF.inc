@@ -76,7 +76,8 @@ class aresMF
             'address' => $this->ares_adresa,
             'dic' => $this->ares_dic_fin,
             //'type' => $this->getTypeFromXML($xml),
-            'status'  => $this->ares_stav_fin
+            'status'  => $this->ares_stav_fin,
+            'server_name'  => $_SERVER['SERVER_NAME']
         );
         return $address;
     }

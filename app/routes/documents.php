@@ -35,6 +35,8 @@ $app->post('/documents', function (Request $request, Response $response, array $
     try {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
+    //$logger = new logger();
+    //$logger->insert($json, "");
     $tabDocuments = new tabDocuments();
     $id = $data['id'];
     $tabDocuments->update( $data['id'], $data['type'], $data['filename'], $data['description'], $data['expiration']);
@@ -52,6 +54,8 @@ $app->post('/documents', function (Request $request, Response $response, array $
 $app->post('/documents/delete', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
+    $logger = new logger();
+    $logger->insert($json, "");
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $tabDocuments->delete($data['id']);
@@ -69,6 +73,8 @@ $app->post('/documents/delete', function (Request $request, Response $response, 
 $app->post('/documents/create', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
+    $logger = new logger();
+    $logger->insert($json, "");
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $lastId = $tabDocuments->insert( $data['type'], $data['filename'], $data['description'], $data['expiration']);

@@ -20,12 +20,13 @@ class tabOffersDocuments extends dbTable
         return $query;
     }
 
-    function insert($idoffer, $iddocument)
+    function insert($idoffer, $iddocument, $typeRS)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idoffer, iddocument) VALUES (?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idoffer, iddocument, typeRS) VALUES (?, ?, ?)');
             $query->bindValue(1, $idoffer, PDO::PARAM_INT);
             $query->bindValue(2, $iddocument, PDO::PARAM_INT);
+            $query->bindValue(3, $typeRS, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
