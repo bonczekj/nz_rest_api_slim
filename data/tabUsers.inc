@@ -18,8 +18,9 @@ class tabUsers extends dbTable
         return $stmt;
     }
 
-    function insert($username, $email, $password, $firstname, $lastname)
+    function insert($username, $email, $password = "xxx", $firstname = "", $lastname = "")
     {
+        $password = is_null($password) ? '' : $password;
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (username, email, password, firstname, lastname) VALUES (?, ?, ?, ?, ?)');
             $query->bindValue(1, $username, PDO::PARAM_STR);
