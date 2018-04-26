@@ -13,7 +13,7 @@ class tabDocuments extends dbTable
     protected $tabName = 'documents';
 
     public function readAll(){
-        $querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName;
+        $querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName. " where type is not null";
         $stmt = $this->read_data($querystr);
         return $stmt;
     }
