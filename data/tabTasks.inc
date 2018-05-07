@@ -11,9 +11,10 @@ include_once "./data/dbTable.inc";
 class tabTasks extends dbTable
 {
     protected $tabName = 'orderstasks';
+    protected $viewName = 'v_orderstasks';
 
     public function readAll(){
-        $querystr = "SELECT * FROM " . $this->tabName;
+        $querystr = 'SELECT * FROM '. $this->viewName;
         $stmt = $this->read_data($querystr);
         return $stmt;
     }

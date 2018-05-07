@@ -13,9 +13,17 @@ class tabUsers extends dbTable
     protected $tabName = 'users';
 
     public function readAll(){
+        try {
         $querystr = "SELECT username, email, firstname, lastname FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
         return $stmt;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při čtení dat. '.$e->getMessage());
+//            die();
+        }
     }
 
     function insert($username, $email, $password = "xxx", $firstname = "", $lastname = "")
@@ -40,19 +48,97 @@ class tabUsers extends dbTable
 
     function update($username, $email, $password, $firstname, $lastname)
     {
-        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, password = ?, firstname = ?, lastname = ? where email = ? ');
-        $query->bindValue(1, $username, PDO::PARAM_STR);
-        $query->bindValue(2, $password, PDO::PARAM_STR);
-        $query->bindValue(3, $firstname, PDO::PARAM_STR);
-        $query->bindValue(4, $lastname, PDO::PARAM_STR);
-        $query->bindValue(5, $email, PDO::PARAM_STR);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, password = ?, firstname = ?, lastname = ? where email = ? ');
+            $query->bindValue(1, $username, PDO::PARAM_STR);
+            $query->bindValue(2, $password, PDO::PARAM_STR);
+            $query->bindValue(3, $firstname, PDO::PARAM_STR);
+            $query->bindValue(4, $lastname, PDO::PARAM_STR);
+            $query->bindValue(5, $email, PDO::PARAM_STR);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+//            die();
+        }
     }
 
     function delete($email)
     {
+        try {
         $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where email = ?');
         $query->bindParam(1, $email, PDO::PARAM_STR, 10);
         $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+//            die();
+        }
     }
+
+    public function login($username, $password){
+        try {
+            $query = $this->conn->prepare("SELECT username, email, firstname, lastname, salesData, techData, token, tokenExpire FROM " . $this->tabName. " where ( username = ? or email = ? ) and password = ?");
+            $query->bindValue(1, $username, PDO::PARAM_STR);
+            $query->bindValue(2, $username, PDO::PARAM_STR);
+            $query->bindValue(3, $password, PDO::PARAM_STR);
+            $query->execute();
+            if ($query->rowCount() == 0){
+                throw new Exception('Chybně zadaný uživatel nebo heslo.');
+            }
+            $data = $query->fetch(PDO::FETCH_OBJ);
+
+            $data->token = bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
+            $data->tokenExpire = date('Y-m-d H:i:s', strtotime('+1 hour'));//the expiration date will be in one hour from the current moment
+            //$this->updateToken($data->email, $data->token, $data->tokenExpire);
+            return $data;
+        }
+        catch(PDOException $e)
+        {
+            throw new Exception('Chyba při přihlášení: '.$e->getMessage());
+        }
+    }
+
+    private  function  updateToken($email, $token, $tokenExpire){
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET token = ?, tokenExpire = ? where email = ? ');
+            $query->bindValue(1, $token, PDO::PARAM_STR);
+            $query->bindValue(2, $tokenExpire, PDO::PARAM_INT);
+            $query->bindValue(3, $email, PDO::PARAM_STR);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+
+    }
+
+    public function checkToken($token){
+        try {
+            $query = $this->conn->prepare("SELECT username, email, token, tokenExpire FROM " . $this->tabName. " where token = ?");
+            $query->bindValue(1, $token, PDO::PARAM_STR);
+            $query->execute();
+            if ($query->rowCount() == 0){
+                throw new Exception('Uživatel není přihlášený');
+            }
+            $data = $query->fetch(PDO::FETCH_OBJ);
+
+            $data->token = bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
+            $data->tokenExpire = date('Y-m-d H:i:s', strtotime('+1 hour'));//the expiration date will be in one hour from the current moment
+            $this->updateToken($data->email, $data->token, $data->tokenExpire);
+            return $data;
+        }
+        catch(PDOException $e)
+        {
+            throw new Exception('Chyba při přihlášení: '.$e->getMessage());
+        }
+    }
+
+
 }

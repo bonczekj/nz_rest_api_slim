@@ -13,19 +13,38 @@ class tabOffers extends dbTable
     protected $tabName = 'offers';
 
     public function readAll(){
-        $querystr = "SELECT id, name, customer, processdate, processtime, deliverytype, errand, winprice, price FROM " . $this->tabName;
+        $querystr = "SELECT id, name, customer, processdate, processtime, deliverytype, errand, winprice, price, idorder FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
         return $stmt;
     }
 
-    function insert($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function getID(){
+        try {
+            $year = date('Y').'%';
+            $query = $this->conn->prepare('SELECT id FROM ' . $this->tabName .' where id like ? order by id desc') ;
+            $query->bindValue(1, $year, PDO::PARAM_STR);
+            $query->execute();
+            $data = $query->fetchAll(PDO::FETCH_ASSOC);
+            $lastID = (int) substr ( $data[0]["id"], 4);
+            $newID = date('Y').sprintf( '%02d', $lastID + 1 );
+            return $newID;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+    }
+
+    function insert($name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
+        $id = $this->getID();
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, customer, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
             $query->bindValue(3, $customer, PDO::PARAM_STR);
-            $query->bindValue(4, $processdate, PDO::PARAM_STR);
+            $query->bindValue(4, $processdate, PDO::PARAM_INT);
             $query->bindValue(5, $processtime, PDO::PARAM_STR);
             $query->bindValue(6, $deliverytype, PDO::PARAM_STR);
             $query->bindValue(7, $errand, PDO::PARAM_STR);
@@ -42,23 +61,54 @@ class tabOffers extends dbTable
 
     function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
-        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
-        $query->bindValue(1, $name, PDO::PARAM_STR);
-        $query->bindValue(2, $customer, PDO::PARAM_STR);
-        $query->bindValue(3, $processdate, PDO::PARAM_STR);
-        $query->bindValue(4, $processtime, PDO::PARAM_STR);
-        $query->bindValue(5, $deliverytype, PDO::PARAM_STR);
-        $query->bindValue(6, $errand, PDO::PARAM_STR);
-        $query->bindValue(7, $winprice, PDO::PARAM_INT);
-        $query->bindValue(8, $price, PDO::PARAM_INT);
-        $query->bindValue(9, $id, PDO::PARAM_STR);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
+            $query->bindValue(1, $name, PDO::PARAM_STR);
+            $query->bindValue(2, $customer, PDO::PARAM_STR);
+            $query->bindValue(3, $processdate, PDO::PARAM_STR);
+            $query->bindValue(4, $processtime, PDO::PARAM_STR);
+            $query->bindValue(5, $deliverytype, PDO::PARAM_STR);
+            $query->bindValue(6, $errand, PDO::PARAM_STR);
+            $query->bindValue(7, $winprice, PDO::PARAM_INT);
+            $query->bindValue(8, $price, PDO::PARAM_INT);
+            $query->bindValue(9, $id, PDO::PARAM_STR);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 
     function delete($id)
     {
-        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where id = ?');
-        $query->bindParam(1, $id, PDO::PARAM_STR);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where id = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
+
+    function linkorder($id, $idorder)
+    {
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET idorder = ? where id = ? ');
+            $query->bindValue(1, $idorder, PDO::PARAM_INT);
+            $query->bindValue(2, $id, PDO::PARAM_INT);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+    }
+
 }
+

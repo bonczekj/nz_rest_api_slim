@@ -13,15 +13,33 @@ include_once "./data/aresMF.inc";
 class tabCustomers extends dbTable
 {
     protected $tabName = 'customers';
+    protected $vNameCust = 'v_customers';
+    protected $vNameSub = 'v_subcustomers';
 
-    public function readAll(){
+    public function readCust(){
+        try {
+            $querystr = "SELECT * FROM " . $this->vNameCust;
+            $stmt = $this->read_data($querystr);
+            return $stmt;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+    }
 
-        //$ares = new ARES('05998468'); // Zadáte IČ
-        //$data = $ares->getData();   // Získáte array s daty
-
-        $querystr = "SELECT ico, name, profession, address FROM " . $this->tabName;
-        $stmt = $this->read_data($querystr);
-        return $stmt;
+    public function readSub(){
+        try {
+            $querystr = "SELECT * FROM " . $this->vNameSub;
+            $stmt = $this->read_data($querystr);
+            return $stmt;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 
     public function readAres($ico){
@@ -31,15 +49,16 @@ class tabCustomers extends dbTable
         return $aresMF->getData();   // Získáte array s daty
     }
 
-    function insert($ico, $name, $profession, $address)
+    function insert($ico, $name, $profession, $address, $sub)
     {
 
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address) VALUES (?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub) VALUES (?, ?, ?, ?, ?)');
             $query->bindValue(1, $ico, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
             $query->bindValue(3, $profession, PDO::PARAM_STR);
             $query->bindValue(4, $address, PDO::PARAM_STR);
+            $query->bindValue(5, $sub, PDO::PARAM_INT);
             $query->execute();
         }
         catch(PDOException $e)

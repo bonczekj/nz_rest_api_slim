@@ -9,7 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabUsers.inc';
+include_once './data/tabUsers.inc';
 
 $app->get('/users', function (Request $request, Response $response, array $args) {
     $tabUsers = new tabUsers();

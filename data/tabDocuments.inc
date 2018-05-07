@@ -13,9 +13,15 @@ class tabDocuments extends dbTable
     protected $tabName = 'documents';
 
     public function readAll(){
-        $querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName;
-        $stmt = $this->read_data($querystr);
-        return $stmt;
+        try {
+            $querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName . " where type <>'' ";
+            $stmt = $this->read_data($querystr);
+            return $stmt;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+        }
     }
 
     function insert($type, $filename, $description, $expiration)
@@ -40,26 +46,39 @@ class tabDocuments extends dbTable
         catch(PDOException $e)
         {
             print "Error!: " . $e->getMessage() . "<br/>";
-            die();
         }
     }
 
     function update($id, $type, $filename, $description, $expiration)
     {
-        $filename = basename($filename);
-        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET type = ?, filename = ?, description = ?, expiration = ? where id = ?');
-        $query->bindParam(1, $type, PDO::PARAM_STR, 10);
-        $query->bindParam(2, $filename, PDO::PARAM_STR, 255);
-        $query->bindParam(3, $description, PDO::PARAM_STR, 200);
-        $query->bindParam(4, $expiration, PDO::PARAM_INT, 30);
-        $query->bindParam(5, $id, PDO::PARAM_INT, 10);
-        $query->execute();
+        try {
+            $filename = basename($filename);
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET type = ?, filename = ?, description = ?, expiration = ? where id = ?');
+            $query->bindParam(1, $type, PDO::PARAM_STR, 10);
+            $query->bindParam(2, $filename, PDO::PARAM_STR, 255);
+            $query->bindParam(3, $description, PDO::PARAM_STR, 200);
+            $query->bindParam(4, $expiration, PDO::PARAM_INT, 30);
+            $query->bindParam(5, $id, PDO::PARAM_INT, 10);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 
     function delete($id)
     {
-        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where id = ?');
-        $query->bindParam(1, $id, PDO::PARAM_INT, 10);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where id = ?');
+            $query->bindParam(1, $id, PDO::PARAM_INT, 10);
+            $query->execute();
+            }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 }

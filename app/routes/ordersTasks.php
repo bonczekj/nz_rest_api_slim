@@ -31,15 +31,15 @@ $app->post('/orderstasks', function (Request $request, Response $response, array
                         ->withBody($e->getMessage());
     }
 });
-/*
-$app->post('/ordersdocuments/delete', function (Request $request, Response $response, array $args) {
+
+$app->post('/orderstasks/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $logger = new logger();
         $logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOffersDocuments = new tabOffersDocuments();
-        $tabOffersDocuments->delete($data['idorder'], $data['iddocument']);
+        $tabOrdersTasks = new tabOrdersTasks();
+        $tabOrdersTasks->delete($data['idtask'], $data['idorder']);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
@@ -51,26 +51,41 @@ $app->post('/ordersdocuments/delete', function (Request $request, Response $resp
     }
 });
 
-$app->post('/ordersdocuments/create', function (Request $request, Response $response, array $args) {
+$app->post('/orderstasks/create', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $logger = new logger();
         $logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabDocuments = new tabDocuments();
-        $tabOffersDocuments = new tabOffersDocuments();
-        foreach($data as $doc) { //foreach element in $arr
-            $lastId = $tabDocuments->insert( '', $doc['filename'], '', null);
-            $tabOffersDocuments->insert($doc['idoffer'], $lastId, $doc['typeRS'] );
-        }
+        $tabOrdersTasks = new tabOrdersTasks();
+        $tabOrdersTasks->insert($data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }
     catch(Exception $e)
     {
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
     }
 });
-*/
+
+$app->post('/orderstasks/update', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabOrdersTasks = new tabOrdersTasks();
+        $tabOrdersTasks->update( $data['idtask'], $data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
+});
+

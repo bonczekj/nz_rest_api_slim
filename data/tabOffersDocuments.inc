@@ -38,9 +38,20 @@ class tabOffersDocuments extends dbTable
 
     function delete($idoffer, $iddocument)
     {
-        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idoffer = ? and iddocument = ?');
-        $query->bindParam(1, $idoffer, PDO::PARAM_INT);
-        $query->bindParam(1, $iddocument, PDO::PARAM_INT);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idoffer = ? and iddocument = ?');
+            $query->bindParam(1, $idoffer, PDO::PARAM_INT);
+            $query->bindParam(2, $iddocument, PDO::PARAM_INT);
+            $query->execute();
+
+            $query = $this->conn->prepare('DELETE FROM documents where id = ?');
+            $query->bindParam(1, $iddocument, PDO::PARAM_INT);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 }

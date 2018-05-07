@@ -28,20 +28,20 @@ $app->get('/offers', function (Request $request, Response $response, array $args
     }
 });
 
-$app->post('/offers', function (Request $request, Response $response, array $args) {
+$app->post('/offers/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOffers = new tabOffers();
         $tabOffers->update( $data['id'], $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(200, 'OK');
+            ->withStatus(200, 'OK');
     }
     catch(Exception $e)
     {
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
     }
 });
 
@@ -67,7 +67,7 @@ $app->post('/offers/create', function (Request $request, Response $response, arr
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabOffers = new tabOffers();
-        $tabOffers->insert( $data['id'], $data['name'], $data['customer'], $data['$processdate'], $data['$processtime'], $data['$deliverytype'], $data['$errand'], $data['$winprice'], $data['$price'] );
+        $tabOffers->insert( $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
@@ -76,6 +76,23 @@ $app->post('/offers/create', function (Request $request, Response $response, arr
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(460, 'Error')
                         ->withBody($e->getMessage());
+    }
+});
+
+$app->post('/offers/linkorder', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabOffers = new tabOffers();
+        $tabOffers->linkorder( $data['id'], $data['idorder']);
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
     }
 });
 

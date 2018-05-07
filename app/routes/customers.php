@@ -14,7 +14,7 @@ include './data/tabCustomers.inc';
 $app->get('/customers', function (Request $request, Response $response, array $args) {
     try {
         $tabCustomers = new tabCustomers();
-        $stmt = $tabCustomers->readAll();
+        $stmt = $tabCustomers->readCust();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -28,7 +28,24 @@ $app->get('/customers', function (Request $request, Response $response, array $a
     }
 });
 
-$app->post('/customers', function (Request $request, Response $response, array $args) {
+$app->get('/subcontractors', function (Request $request, Response $response, array $args) {
+    try {
+        $tabCustomers = new tabCustomers();
+        $stmt = $tabCustomers->readSub();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'Saved');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
+});
+
+$app->post('/customers/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
@@ -67,7 +84,7 @@ $app->post('/customers/create', function (Request $request, Response $response, 
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabCustomers = new tabCustomers();
-            $tabCustomers->insert( $data['ico'], $data['name'], $data['profession'], $data['address']);
+            $tabCustomers->insert( $data['ico'], $data['name'], $data['profession'], $data['address'], $data['sub']);
             return $response->withHeader('Content-Type', 'application/json')
                 ->withStatus(200, 'Saved');
     }

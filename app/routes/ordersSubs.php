@@ -9,12 +9,16 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabOrders.inc';
+include './data/tabOrdersSubs.inc';
 
-$app->get('/orders', function (Request $request, Response $response, array $args) {
+$app->post('/orderssubs', function (Request $request, Response $response, array $args) {
     try {
-        $tabOrders = new tabOrders();
-        $stmt = $tabOrders->readAll();
+        $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabOrdersSubs = new tabOrdersSubs();
+        $stmt = $tabOrdersSubs->readAll($data['id']);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -28,12 +32,14 @@ $app->get('/orders', function (Request $request, Response $response, array $args
     }
 });
 
-$app->post('/orders/update', function (Request $request, Response $response, array $args) {
+$app->post('/orderssubs/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrders = new tabOrders();
-        $tabOrders->update( $data['id'], $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'], $data['price_w'], $data['price_d'], $data['price_r'] );
+        $tabOrdersSubs = new tabOrdersSubs();
+        $tabOrdersSubs->delete($data['idsub'], $data['idorder']);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
@@ -45,46 +51,14 @@ $app->post('/orders/update', function (Request $request, Response $response, arr
     }
 });
 
-$app->post('/orders/delete', function (Request $request, Response $response, array $args) {
+$app->post('/orderssubs/create', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrders = new tabOrders();
-        $tabOrders->delete($data['id']);
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(200, 'OK');
-    }
-    catch(Exception $e)
-    {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
-    }
-});
-
-$app->post('/orders/create', function (Request $request, Response $response, array $args) {
-    try {
-    $json = $request->getBody();
-    $data = json_decode($json, true); // parse the JSON into an assoc. array
-    $tabOrders = new tabOrders();
-        $tabOrders->insert( $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(200, 'OK');
-    }
-    catch(Exception $e)
-    {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
-    }
-});
-
-$app->post('/orders/linkoffer', function (Request $request, Response $response, array $args) {
-    try {
-        $json = $request->getBody();
-        $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrders = new tabOrders();
-        $tabOrders->linkoffer( $data['id'], $data['idoffer']);
+        $tabOrdersSubs = new tabOrdersSubs();
+        $tabOrdersSubs->insert($data['idorder'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }
@@ -95,3 +69,23 @@ $app->post('/orders/linkoffer', function (Request $request, Response $response, 
             ->withBody($e->getMessage());
     }
 });
+
+$app->post('/orderssubs/update', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $logger = new logger();
+        $logger->insert($json, "");
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabOrdersSubs = new tabOrdersSubs();
+        $tabOrdersSubs->update( $data['idorder'], $data['idsub'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error')
+            ->withBody($e->getMessage());
+    }
+});
+
