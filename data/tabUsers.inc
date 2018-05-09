@@ -94,7 +94,8 @@ class tabUsers extends dbTable
 
             $data->token = bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
             $data->tokenExpire = date('Y-m-d H:i:s', strtotime('+1 hour'));//the expiration date will be in one hour from the current moment
-            //$this->updateToken($data->email, $data->token, $data->tokenExpire);
+            //$data->tokenExpire = date('Y-m-d H:i:s');//the expiration date will be in one hour from the current moment
+            $this->updateToken($data->email, $data->token, $data->tokenExpire);
             return $data;
         }
         catch(PDOException $e)
@@ -107,7 +108,7 @@ class tabUsers extends dbTable
         try {
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET token = ?, tokenExpire = ? where email = ? ');
             $query->bindValue(1, $token, PDO::PARAM_STR);
-            $query->bindValue(2, $tokenExpire, PDO::PARAM_INT);
+            $query->bindValue(2, $tokenExpire);
             $query->bindValue(3, $email, PDO::PARAM_STR);
             $query->execute();
         }

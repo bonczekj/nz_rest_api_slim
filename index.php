@@ -14,6 +14,37 @@ $container['upload_directory'] = __DIR__ . '/uploads';
 
 $app = new \Slim\App;
 
+
+//require_once './vendor/tuupola/slim-jwt-auth/src/JwtAuthentication.php';
+//$app->add(new \Slim\Middleware\JwtAuthentication([
+//$app->add(new \Tuupola\Middleware\JwtAuthentication([
+/*$app->add(new \Tuupola\Middleware\JwtAuthentication([
+    "secure" => true,  // pro http
+    "relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],
+    "secret" => "heslo"
+]));*/
+
+
+$authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenAuth){
+
+    # Search for token on header, parameter, cookie or attribute
+    $token = $tokenAuth->findToken($request);
+    echo $token;
+
+    # Your method to make token validation
+    //$user = User::auth_token($token);
+
+    # If occured ok authentication continue to route
+    # before end you can storage the user informations or whatever
+};
+
+$app->add(new \Slim\Middleware\TokenAuthentication([
+    'path' => '/login',
+    'authenticator' => $authenticator,
+    "secure" => true,  // pro http
+    "relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],
+]));
+
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     //$tabDocuments1 = new tabDocuments();
     $name = $args['name'];
