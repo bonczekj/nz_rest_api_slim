@@ -29,7 +29,6 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
 
     # Search for token on header, parameter, cookie or attribute
     $token = $tokenAuth->findToken($request);
-    echo $token;
 
     # Your method to make token validation
     //$user = User::auth_token($token);
@@ -39,7 +38,8 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
 };
 
 $app->add(new \Slim\Middleware\TokenAuthentication([
-    'path' => '/login',
+    //'path' => '/login',
+    'passthrough' => '/login',
     'authenticator' => $authenticator,
     "secure" => true,  // pro http
     "relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],

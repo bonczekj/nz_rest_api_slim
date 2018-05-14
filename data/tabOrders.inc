@@ -11,12 +11,37 @@ include_once "./data/dbTable.inc";
 class tabOrders extends dbTable
 {
     protected $tabName = 'orders';
+    protected $v_Orders = 'v_orders';
 
-    public function readAll(){
-        $querystr = "SELECT id, name, customer, processdate, processtime, deliverytype, errand, winprice, price FROM " . $this->tabName;
-        $stmt = $this->read_data($querystr);
-        return $stmt;
+    public function readAll($archive){
+
+        try {
+            $archiveInt = $archive ? 1 : 0;
+            $stmt = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where archive = ?");
+            $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
+            $stmt->execute();
+            return $stmt;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
+
+    /*public function readById($id){
+        try {
+            $query = $this->conn->prepare("SELECT * FROM " . $this->v_Orders . " where id = ?");
+            $query->bindValue(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            return $query;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+    }*/
 
     function getID(){
         try {
@@ -59,10 +84,10 @@ class tabOrders extends dbTable
         }
     }
 
-    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r)
+    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archiv)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ? where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archiv = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
             $query->bindValue(2, $customer, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
@@ -74,7 +99,8 @@ class tabOrders extends dbTable
             $query->bindValue(9, $price_w, PDO::PARAM_INT);
             $query->bindValue(10, $price_d, PDO::PARAM_INT);
             $query->bindValue(11, $price_r, PDO::PARAM_INT);
-            $query->bindValue(12, $id, PDO::PARAM_STR);
+            $query->bindValue(12, $archiv, PDO::PARAM_INT);
+            $query->bindValue(13, $id, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

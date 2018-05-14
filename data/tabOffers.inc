@@ -11,9 +11,10 @@ include_once "./data/dbTable.inc";
 class tabOffers extends dbTable
 {
     protected $tabName = 'offers';
+    protected $v_offers = 'v_offers';
 
     public function readAll(){
-        $querystr = "SELECT id, name, customer, processdate, processtime, deliverytype, errand, winprice, price, idorder FROM " . $this->tabName;
+        $querystr = "SELECT * FROM " . $this->v_offers;
         $stmt = $this->read_data($querystr);
         return $stmt;
     }

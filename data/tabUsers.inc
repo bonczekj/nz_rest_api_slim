@@ -14,7 +14,7 @@ class tabUsers extends dbTable
 
     public function readAll(){
         try {
-        $querystr = "SELECT username, email, firstname, lastname FROM " . $this->tabName;
+        $querystr = "SELECT username, email, firstname, lastname, salesData FROM " . $this->tabName;
         $stmt = $this->read_data($querystr);
         return $stmt;
         }
@@ -46,14 +46,14 @@ class tabUsers extends dbTable
         }
     }
 
-    function update($username, $email, $password, $firstname, $lastname)
+    function update($username, $email, $firstname, $lastname, $salesData)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, password = ?, firstname = ?, lastname = ? where email = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, firstname = ?, lastname = ?, salesData = ? where email = ? ');
             $query->bindValue(1, $username, PDO::PARAM_STR);
-            $query->bindValue(2, $password, PDO::PARAM_STR);
-            $query->bindValue(3, $firstname, PDO::PARAM_STR);
-            $query->bindValue(4, $lastname, PDO::PARAM_STR);
+            $query->bindValue(2, $firstname, PDO::PARAM_STR);
+            $query->bindValue(3, $lastname, PDO::PARAM_STR);
+            $query->bindValue(4, $salesData, PDO::PARAM_INT);
             $query->bindValue(5, $email, PDO::PARAM_STR);
             $query->execute();
         }

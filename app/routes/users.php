@@ -55,7 +55,7 @@ $app->post('/users', function (Request $request, Response $response, array $args
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabUsers= new tabUsers();
-        $tabUsers->update( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        $tabUsers->update( $data['username'], $data['email'], $data['firstname'], $data['lastname'], $data['salesData']);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'Saved');
     }
