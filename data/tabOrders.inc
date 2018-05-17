@@ -13,12 +13,21 @@ class tabOrders extends dbTable
     protected $tabName = 'orders';
     protected $v_Orders = 'v_orders';
 
-    public function readAll($archive){
+    public function readAll($archive, $searchValue){
 
         try {
             $archiveInt = $archive ? 1 : 0;
-            $stmt = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where archive = ?");
-            $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
+            if ($searchValue) {
+                $searchValue = '%'.$searchValue.'%';
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where archive = ? and ( id like ? or name like ? or customer like ?)");
+                $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
+                $stmt->bindValue(2, $searchValue, PDO::PARAM_STR);
+                $stmt->bindValue(3, $searchValue, PDO::PARAM_STR);
+                $stmt->bindValue(4, $searchValue, PDO::PARAM_STR);
+            }else{
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where archive = ?");
+                $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
+            }
             $stmt->execute();
             return $stmt;
         }

@@ -9,8 +9,8 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabDocType.inc';
-include './data/logger.inc';
+include_once './data/tabDocType.inc';
+include_once './data/logger.inc';
 
 $app->get('/doctype', function (Request $request, Response $response, array $args) {
     try {

@@ -9,7 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require './vendor/autoload.php';
-//include './data/logger.inc';
+require './data/logger.inc';
 $container['upload_directory'] = __DIR__ . '/uploads';
 
 $app = new \Slim\App;
@@ -44,6 +44,8 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
     # before end you can storage the user informations or whatever
 };
 
+$app->add(new LoggerMiddleware());
+
 $app->add(new \Slim\Middleware\TokenAuthentication([
     //'path' => '/login',
     'passthrough' => '/login',
@@ -51,6 +53,7 @@ $app->add(new \Slim\Middleware\TokenAuthentication([
     "secure" => true,  // pro http
     "relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],
 ]));
+
 
 $app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
     //$tabDocuments1 = new tabDocuments();

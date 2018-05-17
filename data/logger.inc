@@ -5,7 +5,30 @@
  * Date: 19.04.2018
  * Time: 11:44
  */
-include_once "./data/dbTable.inc";
+//include_once "./data/dbTable.inc";
+require_once "./data/dbTable.inc";
+
+class LoggerMiddleware
+{
+    /**
+     * Example middleware invokable class
+     *
+     * @param  \Psr\Http\Message\ServerRequestInterface $request  PSR7 request
+     * @param  \Psr\Http\Message\ResponseInterface      $response PSR7 response
+     * @param  callable                                 $next     Next middleware
+     *
+     * @return \Psr\Http\Message\ResponseInterface
+     */
+    public function __invoke($request, $response, $next)
+    {
+        $json = $request->getBody();
+        if ($request->isPost()) {
+            $logger = new logger();
+            $logger->insert($json, "");
+        }
+        return $next($request, $response);
+    }
+}
 
 class logger extends dbTable
 {

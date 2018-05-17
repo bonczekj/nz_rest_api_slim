@@ -16,8 +16,8 @@ $app->post('/login', function (Request $request, Response $response, array $args
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabUsers = new tabUsers();
         $user = $tabUsers->login( $data['username'], $data['password']);

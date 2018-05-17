@@ -9,7 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabCustomers.inc';
+include_once './data/tabCustomers.inc';
 
 $app->get('/customers', function (Request $request, Response $response, array $args) {
     try {
@@ -50,8 +50,8 @@ $app->post('/customers/update', function (Request $request, Response $response, 
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabCustomers = new tabCustomers();
         $tabCustomers->update( $data);
@@ -103,8 +103,8 @@ $app->post('/customers/create', function (Request $request, Response $response, 
 $app->post('/customers/ares', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabCustomers = new tabCustomers();
         $dataAres = $tabCustomers->readAres( $data['ico']);

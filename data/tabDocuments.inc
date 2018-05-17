@@ -6,7 +6,7 @@
  * Time: 19:51
  */
 
-include "./data/dbTable.inc";
+include_once "./data/dbTable.inc";
 
 class tabDocuments extends dbTable
 {

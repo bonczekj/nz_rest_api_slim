@@ -9,7 +9,7 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabDocuments.inc';
+include_once './data/tabDocuments.inc';
 
 $app->get('/documents', function (Request $request, Response $response, array $args) {
     try {
@@ -54,8 +54,8 @@ $app->post('/documents', function (Request $request, Response $response, array $
 $app->post('/documents/delete', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
-    $logger = new logger();
-    $logger->insert($json, "");
+    //$logger = new logger();
+    //$logger->insert($json, "");
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $tabDocuments->delete($data['id']);
@@ -73,8 +73,8 @@ $app->post('/documents/delete', function (Request $request, Response $response, 
 $app->post('/documents/create', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
-    $logger = new logger();
-    $logger->insert($json, "");
+    //$logger = new logger();
+    //$logger->insert($json, "");
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $lastId = $tabDocuments->insert( $data['type'], $data['filename'], $data['description'], $data['expiration']);

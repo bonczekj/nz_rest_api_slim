@@ -14,10 +14,30 @@ class tabOffers extends dbTable
     protected $tabName = 'offers';
     protected $v_offers = 'v_offers';
 
-    public function readAll(){
-        $querystr = "SELECT * FROM " . $this->v_offers;
-        $stmt = $this->read_data($querystr);
-        return $stmt;
+    public function readAll($searchValue){
+        try {
+            if ($searchValue) {
+                $searchValue = '%'.$searchValue.'%';
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers . " where ( id like ? or name like ? or customer like ?)");
+                $stmt->bindValue(1, $searchValue, PDO::PARAM_STR);
+                $stmt->bindValue(2, $searchValue, PDO::PARAM_STR);
+                $stmt->bindValue(3, $searchValue, PDO::PARAM_STR);
+            }else{
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers);
+            }
+            $stmt->execute();
+            return $stmt;
+       }
+        catch(Exception $e)
+        {
+            return $response->withHeader('Content-Type', 'application/json')
+                ->withStatus(460, 'Error')
+                ->withBody($e->getMessage());
+        }
+
+        //$querystr = "SELECT * FROM " . $this->v_offers;
+        //$stmt = $this->read_data($querystr);
+        //return $stmt;
     }
 
     function getID(){

@@ -13,8 +13,10 @@ include_once './data/tabOffers.inc';
 
 $app->get('/offers', function (Request $request, Response $response, array $args) {
     try {
+        $params = $request->getQueryParams();
+        $searchValue = $params['search'];
         $tabOffers = new tabOffers();
-        $stmt = $tabOffers->readAll();
+        $stmt = $tabOffers->readAll($searchValue);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -32,8 +34,8 @@ $app->post('/offers/update', function (Request $request, Response $response, arr
     try {
         $json = $request->getBody();
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOffers = new tabOffers();
@@ -53,8 +55,8 @@ $app->post('/offers/delete', function (Request $request, Response $response, arr
     try {
         $json = $request->getBody();
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOffers = new tabOffers();
@@ -74,8 +76,8 @@ $app->post('/offers/create', function (Request $request, Response $response, arr
     try {
     $json = $request->getBody();
 
-    $logger = new logger();
-    $logger->insert($json, "");
+    //$logger = new logger();
+    //$logger->insert($json, "");
 
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabOffers = new tabOffers();
@@ -96,8 +98,8 @@ $app->post('/offers/createorder', function (Request $request, Response $response
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabOffers = new tabOffers();
         $order = $tabOffers->createorder( $data );

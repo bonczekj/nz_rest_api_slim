@@ -9,13 +9,13 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabOrdersTasks.inc';
+include_once './data/tabOrdersTasks.inc';
 
 $app->post('/orderstasks', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
         $stmt = $tabOrdersTasks->readAll($data['id']);
@@ -35,8 +35,8 @@ $app->post('/orderstasks', function (Request $request, Response $response, array
 $app->post('/orderstasks/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
         $tabOrdersTasks->delete($data['idtask'], $data['idorder']);
@@ -54,8 +54,8 @@ $app->post('/orderstasks/delete', function (Request $request, Response $response
 $app->post('/orderstasks/create', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
         $tabOrdersTasks->insert($data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);
@@ -73,8 +73,8 @@ $app->post('/orderstasks/create', function (Request $request, Response $response
 $app->post('/orderstasks/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
         $tabOrdersTasks->update( $data['idtask'], $data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);

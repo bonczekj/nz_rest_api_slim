@@ -13,8 +13,10 @@ include_once './data/tabOrders.inc';
 
 $app->get('/orders', function (Request $request, Response $response, array $args) {
     try {
+        $params = $request->getQueryParams();
+        $searchValue = $params['search'];
         $tabOrders = new tabOrders();
-        $stmt = $tabOrders->readAll(false);
+        $stmt = $tabOrders->readAll(false, $searchValue);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -30,8 +32,10 @@ $app->get('/orders', function (Request $request, Response $response, array $args
 
 $app->get('/ordersarchive', function (Request $request, Response $response, array $args) {
     try {
+        $params = $request->getQueryParams();
+        $searchValue = $params['search'];
         $tabOrders = new tabOrders();
-        $stmt = $tabOrders->readAll(true);
+        $stmt = $tabOrders->readAll(true, $searchValue);
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -50,8 +54,8 @@ $app->post('/orders/update', function (Request $request, Response $response, arr
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabOrders = new tabOrders();
         $tabOrders->update( $data['id'], $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'], $data['price_w'], $data['price_d'], $data['price_r'], $data['archive'] );
@@ -71,8 +75,8 @@ $app->post('/orders/delete', function (Request $request, Response $response, arr
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabOrders = new tabOrders();
         $tabOrders->delete($data['id']);
@@ -92,8 +96,8 @@ $app->post('/orders/create', function (Request $request, Response $response, arr
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
 
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
 
         $tabOrders = new tabOrders();
         //$tabOrders->insert( $data['name'], $data['customer'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );

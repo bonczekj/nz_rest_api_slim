@@ -9,13 +9,13 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include './data/tabOrdersDocuments.inc';
+include_once './data/tabOrdersDocuments.inc';
 
 $app->post('/ordersdocuments', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersDocuments = new tabOrdersDocuments();
         $stmt = $tabOrdersDocuments->readAll($data['id']);
@@ -35,8 +35,8 @@ $app->post('/ordersdocuments', function (Request $request, Response $response, a
 $app->post('/ordersdocuments/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOffersDocuments = new tabOffersDocuments();
         $tabOffersDocuments->delete($data['idoffer'], $data['iddocument']);
@@ -54,8 +54,8 @@ $app->post('/ordersdocuments/delete', function (Request $request, Response $resp
 $app->post('/ordersdocuments/create', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        $logger = new logger();
-        $logger->insert($json, "");
+        //$logger = new logger();
+        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabDocuments = new tabDocuments();
         $tabOffersDocuments = new tabOffersDocuments();
