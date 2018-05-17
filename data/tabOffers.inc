@@ -7,6 +7,7 @@
  */
 
 include_once "./data/dbTable.inc";
+include_once "./data/tabOrders.inc";
 
 class tabOffers extends dbTable
 {
@@ -96,17 +97,21 @@ class tabOffers extends dbTable
         }
     }
 
-    function linkorder($id, $idorder)
+    function createorder($data)
     {
         try {
+            $tabOrders = new tabOrders();
+            $newOrder = $tabOrders->insert($data);
+
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET idorder = ? where id = ? ');
-            $query->bindValue(1, $idorder, PDO::PARAM_INT);
-            $query->bindValue(2, $id, PDO::PARAM_INT);
+            $query->bindValue(1, $newOrder['id'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['id'], PDO::PARAM_STR);
             $query->execute();
+            return $newOrder;
         }
         catch(PDOException $e)
         {
-            print "Error!: " . $e->getMessage() . "<br/>";
+            //print "Error!: " . $e->getMessage() . "<br/>";
             throw new Exception('Chyba při ukládání. '.$e->getMessage());
         }
     }

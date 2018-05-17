@@ -49,8 +49,12 @@ $app->post('/customers/update', function (Request $request, Response $response, 
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+        $logger = new logger();
+        $logger->insert($json, "");
+
         $tabCustomers = new tabCustomers();
-        $tabCustomers->update( $data['ico'], $data['name'], $data['profession'], $data['address']);
+        $tabCustomers->update( $data);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'Saved');
     }
@@ -84,7 +88,7 @@ $app->post('/customers/create', function (Request $request, Response $response, 
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabCustomers = new tabCustomers();
-            $tabCustomers->insert( $data['ico'], $data['name'], $data['profession'], $data['address'], $data['sub']);
+            $tabCustomers->insert($data);
             return $response->withHeader('Content-Type', 'application/json')
                 ->withStatus(200, 'Saved');
     }

@@ -61,12 +61,14 @@ class tabOrders extends dbTable
         }
     }
 
-    function insert($name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    //function insert($name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $idoffer)
+    function insert($data)
     {
         $id = $this->getID();
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, customer, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-            $query->bindValue(1, $id, PDO::PARAM_STR);
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, customer, processdate, processtime, deliverytype, errand, winprice, price, idoffer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+
+            /*$query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
             $query->bindValue(3, $customer, PDO::PARAM_STR);
             $query->bindValue(4, $processdate, PDO::PARAM_STR);
@@ -75,19 +77,40 @@ class tabOrders extends dbTable
             $query->bindValue(7, $errand, PDO::PARAM_STR);
             $query->bindValue(8, $winprice, PDO::PARAM_INT);
             $query->bindValue(9, $price, PDO::PARAM_INT);
+            $query->bindValue(10, $idoffer, PDO::PARAM_STR);*/
+
+            $query->bindValue(1, $id, PDO::PARAM_STR);
+            $query->bindValue(2, $data['name'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['customer'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['processdate'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['processtime'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['deliverytype'], PDO::PARAM_STR);
+            $query->bindValue(7, $data['errand'], PDO::PARAM_STR);
+            $query->bindValue(8, $data['winprice'], PDO::PARAM_INT);
+            $query->bindValue(9, $data['price'], PDO::PARAM_INT);
+
+            if(empty($data['idoffer'])){
+                $data['idoffer'] = null;
+            }
+            $query->bindValue(10, $data['idoffer'], PDO::PARAM_STR);
             $query->execute();
+
+            $query1 = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where id = ?");
+            $query1->bindValue(1, $id, PDO::PARAM_STR);
+            $query1->execute();
+            return $query1->fetch(PDO::FETCH_ASSOC);
         }
         catch(PDOException $e)
         {
-            print "Error!: " . $e->getMessage() . "<br/>";
+            //print "Error!: " . $e->getMessage() . "<br/>";
             throw new Exception('Chyba při ukládání. '.$e->getMessage());
         }
     }
 
-    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archiv)
+    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archive)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archiv = ? where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
             $query->bindValue(2, $customer, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
@@ -99,7 +122,7 @@ class tabOrders extends dbTable
             $query->bindValue(9, $price_w, PDO::PARAM_INT);
             $query->bindValue(10, $price_d, PDO::PARAM_INT);
             $query->bindValue(11, $price_r, PDO::PARAM_INT);
-            $query->bindValue(12, $archiv, PDO::PARAM_INT);
+            $query->bindValue(12, $archive, PDO::PARAM_INT);
             $query->bindValue(13, $id, PDO::PARAM_STR);
             $query->execute();
         }

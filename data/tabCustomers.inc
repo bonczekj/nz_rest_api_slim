@@ -49,16 +49,16 @@ class tabCustomers extends dbTable
         return $aresMF->getData();   // Získáte array s daty
     }
 
-    function insert($ico, $name, $profession, $address, $sub)
+    function insert($data)
     {
-
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub) VALUES (?, ?, ?, ?, ?)');
-            $query->bindValue(1, $ico, PDO::PARAM_STR);
-            $query->bindValue(2, $name, PDO::PARAM_STR);
-            $query->bindValue(3, $profession, PDO::PARAM_STR);
-            $query->bindValue(4, $address, PDO::PARAM_STR);
-            $query->bindValue(5, $sub, PDO::PARAM_INT);
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub, dealtype) VALUES (?, ?, ?, ?, ?, ?)');
+            $query->bindValue(1, $data['$ico'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['name'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['profession'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['address'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['sub'], PDO::PARAM_INT);
+            $query->bindValue(6, $data['dealtype'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -68,13 +68,14 @@ class tabCustomers extends dbTable
         }
     }
 
-    function update($ico, $name, $profession, $address)
+    function update($data)
     {
-        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, profession = ?, address = ? where ico = ? ');
-        $query->bindValue(1, $name, PDO::PARAM_STR);
-        $query->bindValue(2, $profession, PDO::PARAM_STR);
-        $query->bindValue(3, $address, PDO::PARAM_STR);
-        $query->bindValue(4, $ico, PDO::PARAM_STR);
+        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, profession = ?, address = ?, dealtype = ? where ico = ? ');
+        $query->bindValue(1, $data['name'], PDO::PARAM_STR);
+        $query->bindValue(2, $data['profession'], PDO::PARAM_STR);
+        $query->bindValue(3, $data['address'], PDO::PARAM_STR);
+        $query->bindValue(4, $data['dealtype'], PDO::PARAM_STR);
+        $query->bindValue(5, $data['ico'], PDO::PARAM_STR);
         $query->execute();
     }
 

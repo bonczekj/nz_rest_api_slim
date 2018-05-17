@@ -28,6 +28,13 @@ $app = new \Slim\App;
 $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenAuth){
 
     # Search for token on header, parameter, cookie or attribute
+/*
+    $json = $request->getBody();
+    $data = json_decode($json, true); // parse the JSON into an assoc. array
+    $logger = new logger();
+    $logger->insert($json, "");
+*/
+
     $token = $tokenAuth->findToken($request);
 
     # Your method to make token validation
