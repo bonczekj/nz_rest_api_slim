@@ -13,18 +13,18 @@ class tabOrdersDocuments extends dbTable
 {
     protected $tabName = 'ordersdocuments';
 
-    public function readAll($idoffer){
-        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ', documents where iddocument = documents.id and  idoffer = ?' );
-        $query->bindValue(1, $idoffer, PDO::PARAM_INT);
+    public function readAll($idorder){
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ', documents where iddocument = documents.id and idorder = ?' );
+        $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;
     }
 
-    function insert($idoffer, $iddocument, $typeRS)
+    function insert($idorder, $iddocument, $typeRS)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idoffer, iddocument, typeRS) VALUES (?, ?, ?)');
-            $query->bindValue(1, $idoffer, PDO::PARAM_INT);
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, iddocument, typeRS) VALUES (?, ?, ?)');
+            $query->bindValue(1, $idorder, PDO::PARAM_STR);
             $query->bindValue(2, $iddocument, PDO::PARAM_INT);
             $query->bindValue(3, $typeRS, PDO::PARAM_STR);
             $query->execute();
@@ -36,10 +36,10 @@ class tabOrdersDocuments extends dbTable
         }
     }
 
-    function delete($idoffer, $iddocument)
+    function delete($idorder, $iddocument)
     {
-        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idoffer = ? and iddocument = ?');
-        $query->bindParam(1, $idoffer, PDO::PARAM_INT);
+        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idorder = ? and iddocument = ?');
+        $query->bindParam(1, $idorder, PDO::PARAM_STR);
         $query->bindParam(1, $iddocument, PDO::PARAM_INT);
         $query->execute();
     }

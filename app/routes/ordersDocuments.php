@@ -38,8 +38,8 @@ $app->post('/ordersdocuments/delete', function (Request $request, Response $resp
         //$logger = new logger();
         //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOffersDocuments = new tabOffersDocuments();
-        $tabOffersDocuments->delete($data['idoffer'], $data['iddocument']);
+        $tabOrdersDocuments = new tabOrdersDocuments();
+        $tabOrdersDocuments->delete($data['idorder'], $data['iddocument']);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
@@ -58,10 +58,10 @@ $app->post('/ordersdocuments/create', function (Request $request, Response $resp
         //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabDocuments = new tabDocuments();
-        $tabOffersDocuments = new tabOffersDocuments();
+        $tabOrdersDocuments = new tabOrdersDocuments();
         foreach($data as $doc) { //foreach element in $arr
             $lastId = $tabDocuments->insert( '', $doc['filename'], '', null);
-            $tabOffersDocuments->insert($doc['idoffer'], $lastId, $doc['typeRS'] );
+            $tabOrdersDocuments->insert($doc['idorder'], $lastId, $doc['typeRS'] );
         }
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
