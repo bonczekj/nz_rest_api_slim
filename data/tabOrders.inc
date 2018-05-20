@@ -20,13 +20,13 @@ class tabOrders extends dbTable
             $archiveInt = $archive ? 1 : 0;
             if ($searchValue) {
                 $searchValue = '%'.$searchValue.'%';
-                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? and ( id like ? or name like ? or customer like ?)");
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? and ( id like ? or name like ? or customer like ?) order by id");
                 $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
                 $stmt->bindValue(2, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(3, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(4, $searchValue, PDO::PARAM_STR);
             }else{
-                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ?");
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? order by id");
                 $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
             }
             $stmt->execute();
