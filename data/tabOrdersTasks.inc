@@ -15,7 +15,7 @@ class tabOrdersTasks extends dbTable
 
     public function readAll($idorder){
         $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ' where idorder = ?' );
-        $query->bindValue(1, $idorder, PDO::PARAM_INT);
+        $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;
     }
@@ -24,7 +24,7 @@ class tabOrdersTasks extends dbTable
     {
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskdesc, finished, price) VALUES (?, ?, ?, ?, ?)');
-            $query->bindValue(1, $idorder, PDO::PARAM_INT);
+            $query->bindValue(1, $idorder, PDO::PARAM_STR);
             $query->bindValue(2, $taskdate, PDO::PARAM_INT);
             $query->bindValue(3, $taskdesc, PDO::PARAM_STR);
             $query->bindValue(4, $finished, PDO::PARAM_INT);
@@ -47,7 +47,7 @@ class tabOrdersTasks extends dbTable
             $query->bindValue(3, $finished, PDO::PARAM_INT);
             $query->bindValue(4, $price, PDO::PARAM_INT);
             $query->bindValue(5, $idtask, PDO::PARAM_INT);
-            $query->bindValue(6, $idorder, PDO::PARAM_INT);
+            $query->bindValue(6, $idorder, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -62,7 +62,7 @@ class tabOrdersTasks extends dbTable
         try {
             $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idtask = ? and idorder = ?');
             $query->bindParam(1, $idtask, PDO::PARAM_INT);
-            $query->bindParam(2, $idorder, PDO::PARAM_INT);
+            $query->bindParam(2, $idorder, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
