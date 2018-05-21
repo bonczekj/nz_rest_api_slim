@@ -15,7 +15,7 @@ class tabOrdersSubs extends dbTable
 
     public function readAll($idorder){
         $query = $this->conn->prepare('SELECT * FROM ' . $this->vName. ' where idorder = ?' );
-        $query->bindValue(1, $idorder, PDO::PARAM_INT);
+        $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;
     }
@@ -24,8 +24,8 @@ class tabOrdersSubs extends dbTable
     {
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico, taskdate, finished, price, invoice) VALUES (?, ?, ?, ?, ?, ?)');
-            $query->bindValue(1, $idorder, PDO::PARAM_INT);
-            $query->bindValue(2, $ico, PDO::PARAM_STRINT);
+            $query->bindValue(1, $idorder, PDO::PARAM_STR);
+            $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->bindValue(3, $taskdate, PDO::PARAM_INT);
             $query->bindValue(4, $finished, PDO::PARAM_INT);
             $query->bindValue(5, $price, PDO::PARAM_INT);
@@ -49,7 +49,7 @@ class tabOrdersSubs extends dbTable
             $query->bindValue(4, $price, PDO::PARAM_INT);
             $query->bindValue(5, $invoice, PDO::PARAM_STR);
             $query->bindValue(6, $idsub, PDO::PARAM_INT);
-            $query->bindValue(7, $idorder, PDO::PARAM_INT);
+            $query->bindValue(7, $idorder, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -64,7 +64,7 @@ class tabOrdersSubs extends dbTable
         try {
             $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idsub = ? and idorder = ?');
             $query->bindParam(1, $idsub, PDO::PARAM_INT);
-            $query->bindParam(2, $idorder, PDO::PARAM_INT);
+            $query->bindParam(2, $idorder, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

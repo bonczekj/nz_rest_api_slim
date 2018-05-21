@@ -76,7 +76,7 @@ class tabOrders extends dbTable
     {
         $id = $this->getID();
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, customer, processdate, processtime, deliverytype, errand, winprice, price, idoffer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price, idoffer) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
             /*$query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
@@ -91,7 +91,7 @@ class tabOrders extends dbTable
 
             $query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $data['name'], PDO::PARAM_STR);
-            $query->bindValue(3, $data['customer'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['ico'], PDO::PARAM_STR);
             $query->bindValue(4, $data['processdate'], PDO::PARAM_STR);
             $query->bindValue(5, $data['processtime'], PDO::PARAM_STR);
             $query->bindValue(6, $data['deliverytype'], PDO::PARAM_STR);
@@ -117,12 +117,12 @@ class tabOrders extends dbTable
         }
     }
 
-    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archive)
+    function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archive)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ? where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
-            $query->bindValue(2, $customer, PDO::PARAM_STR);
+            $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
             $query->bindValue(4, $processtime, PDO::PARAM_STR);
             $query->bindValue(5, $deliverytype, PDO::PARAM_STR);
