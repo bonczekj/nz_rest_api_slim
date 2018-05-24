@@ -117,23 +117,24 @@ class tabOrders extends dbTable
         }
     }
 
-    function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archive)
+    //function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $price_w, $price_d, $price_r, $archive)
+    function update($data)
     {
         try {
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ? where id = ? ');
-            $query->bindValue(1, $name, PDO::PARAM_STR);
-            $query->bindValue(2, $ico, PDO::PARAM_STR);
-            $query->bindValue(3, $processdate, PDO::PARAM_STR);
-            $query->bindValue(4, $processtime, PDO::PARAM_STR);
-            $query->bindValue(5, $deliverytype, PDO::PARAM_STR);
-            $query->bindValue(6, $errand, PDO::PARAM_STR);
-            $query->bindValue(7, $winprice, PDO::PARAM_INT);
-            $query->bindValue(8, $price, PDO::PARAM_INT);
-            $query->bindValue(9, $price_w, PDO::PARAM_INT);
-            $query->bindValue(10, $price_d, PDO::PARAM_INT);
-            $query->bindValue(11, $price_r, PDO::PARAM_INT);
-            $query->bindValue(12, $archive, PDO::PARAM_INT);
-            $query->bindValue(13, $id, PDO::PARAM_STR);
+            $query->bindValue(1, $data['name'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['ico'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['processdate'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['processtime'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['deliverytype'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['errand'], PDO::PARAM_STR);
+            $query->bindValue(7, $data['winprice'], PDO::PARAM_INT);
+            $query->bindValue(8, $data['price'], PDO::PARAM_INT);
+            $query->bindValue(9, $data['price_w'], PDO::PARAM_INT);
+            $query->bindValue(10, $data['price_d'], PDO::PARAM_INT);
+            $query->bindValue(11, $data['price_r'], PDO::PARAM_INT);
+            $query->bindValue(12, $data['archive'], PDO::PARAM_INT);
+            $query->bindValue(13, $data['id'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

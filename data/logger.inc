@@ -8,6 +8,9 @@
 //include_once "./data/dbTable.inc";
 require_once "./data/dbTable.inc";
 
+use \Psr\Http\Message\ServerRequestInterface as Request;
+use \Psr\Http\Message\ResponseInterface as Response;
+
 class LoggerMiddleware
 {
     /**
@@ -21,12 +24,21 @@ class LoggerMiddleware
      */
     public function __invoke($request, $response, $next)
     {
+        $logger = new logger();
         $json = $request->getBody();
         if ($request->isPost()) {
-            $logger = new logger();
             $logger->insert($json, "");
         }
-        return $next($request, $response);
+        if ($request->isGet()) {
+            //$logger->insert($json, "");
+        }
+        $response = $next($request, $response);
+        if ($response->getStatusCode() != 200 ){
+            $response->getBody()->rewind();
+            $body = $response->getBody()->getContents();
+            $logger->insert($json, $body);
+        }
+        return $response;
     }
 }
 
@@ -53,6 +65,10 @@ class logger extends dbTable
                 $request_uri = "REQUEST_URI_UNKNOWN";
             }
 
+            if (json_decode($json) == null){
+                $json = null;
+            }
+
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (remote_addr, request_uri, message, json) VALUES (?, ?, ?, ?)');
             $query->bindValue(1, $remote_addr, PDO::PARAM_STR);
             $query->bindValue(2, $request_uri, PDO::PARAM_STR);
@@ -63,7 +79,7 @@ class logger extends dbTable
         catch(PDOException $e)
         {
             //print "Error!: " . $e->getMessage() . "<br/>";
-            //throw new Exception('Chyba při ukládání. '.$e->getMessage());
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
         }
     }
 }

@@ -14,6 +14,7 @@ $container['upload_directory'] = __DIR__ . '/uploads';
 
 $app = new \Slim\App;
 
+error_reporting(E_ALL & ~E_NOTICE);
 
 //require_once './vendor/tuupola/slim-jwt-auth/src/JwtAuthentication.php';
 //$app->add(new \Slim\Middleware\JwtAuthentication([

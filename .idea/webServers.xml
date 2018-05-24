@@ -8,7 +8,7 @@
       <webServer id="b74fd54c-9efe-44a8-ada6-e587ebce2773" name="000webhost" url="http://files.000webhost.com">
         <fileTransfer host="files.000webhost.com" port="21" rootFolder="/public_html">
           <advancedOptions>
-            <advancedOptions dataProtectionLevel="Private" passiveMode="true" showHiddenFiles="true" />
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="100000" passiveMode="true" showHiddenFiles="true" />
           </advancedOptions>
           <option name="port" value="21" />
         </fileTransfer>

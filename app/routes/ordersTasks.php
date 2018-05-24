@@ -58,7 +58,7 @@ $app->post('/orderstasks/create', function (Request $request, Response $response
         //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
-        $tabOrdersTasks->insert($data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);
+        $tabOrdersTasks->insert($data);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }
@@ -77,7 +77,7 @@ $app->post('/orderstasks/update', function (Request $request, Response $response
         //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersTasks = new tabOrdersTasks();
-        $tabOrdersTasks->update( $data['idtask'], $data['idoorder'], $data['idorder'], $data['taskdate'], $data['taskdesc'], $data['finished'], $data['$price']);
+        $tabOrdersTasks->update($data);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }

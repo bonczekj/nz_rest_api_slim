@@ -58,7 +58,8 @@ $app->post('/orders/update', function (Request $request, Response $response, arr
         //$logger->insert($json, "");
 
         $tabOrders = new tabOrders();
-        $tabOrders->update( $data['id'], $data['name'], $data['ico'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'], $data['price_w'], $data['price_d'], $data['price_r'], $data['archive'] );
+        //$tabOrders->update( $data['id'], $data['name'], $data['ico'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'], $data['price_w'], $data['price_d'], $data['price_r'], $data['archive'] );
+        $tabOrders->update($data);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
