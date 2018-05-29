@@ -73,8 +73,6 @@ $app->post('/documents/delete', function (Request $request, Response $response, 
 $app->post('/documents/create', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
-    //$logger = new logger();
-    //$logger->insert($json, "");
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabDocuments = new tabDocuments();
     $lastId = $tabDocuments->insert( $data['type'], $data['filename'], $data['description'], $data['expiration']);
@@ -90,9 +88,9 @@ $app->post('/documents/create', function (Request $request, Response $response, 
     }
 });
 
-$app->post('/file', function (Request $request, Response $response, array $args) {
+$app->post('/fileupload', function (Request $request, Response $response, array $args) {
     try {
-        $directory = getcwd().'\uploads';
+        $directory = $this->get('upload_directory');
         $files = $request->getUploadedFiles();
         foreach ($files as &$value) {
             $uploadedFile = $value;
@@ -101,12 +99,11 @@ $app->post('/file', function (Request $request, Response $response, array $args)
         //$file = $files['file'];
 
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-            $fileName = moveUploadedFile($directory, $uploadedFile);
-            return $response->withJson([
-                'result' => [
-                    'fileName' => $fileName
-                ],
-            ])->withStatus(200, 'OK')
+            $fileName = $uploadedFile->getClientFilename();
+            $techName = moveUploadedFile($directory, $uploadedFile);
+            $tabDocuments = new tabDocuments();
+            $fileId = $tabDocuments->insert( '', $fileName, '', null, $techName);
+            return $response->withJson(['docID' => $fileId])->withStatus(200, 'OK')
               ->withHeader('Content-Type', 'application/json');
         }else {
             return $response
@@ -131,3 +128,44 @@ function moveUploadedFile($directory, $uploadedFile){
         $uploadedFile->moveTo($directory . DIRECTORY_SEPARATOR . $filename);
         return $filename;
 }
+
+$app->post('/filedownload', function (Request $request, Response $response, array $args) {
+    try {
+        $directory = $this->get('upload_directory');
+
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabDocuments = new tabDocuments();
+        $document = $tabDocuments->readDocument($data['id']);
+
+        $file = $directory . "\\" . $document['techname'];
+
+        if (file_exists($file)){
+            $fh = fopen($file, 'rb');
+            $stream = new \Slim\Http\Stream($fh); // create a stream instance for the response body
+            return $response->withHeader('Content-Type', 'application/force-download')
+                ->withHeader('Content-Type', 'application/octet-stream')
+                ->withHeader('Content-Type', 'application/download')
+                ->withHeader('Content-Description', 'File Transfer')
+                ->withHeader('Content-Transfer-Encoding', 'binary')
+                ->withHeader('Content-Disposition', 'attachment; filename="' . $document['filename'] . '"')
+                ->withHeader('Expires', '0')
+                ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
+                ->withHeader('Pragma', 'public')
+                ->withHeader('Content-Length', filesize($file))
+                ->withBody($stream); // all stream contents will be sent to the response
+        }else {
+            throw new Exception('Dokument nebyl nalezen');
+        }
+        //readfile($file);
+        //return $response;
+    }
+    catch(Exception $e)
+    {
+        $body = $response->getBody();
+        $body->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(460, 'Error');
+            //->withBody($e->getMessage());
+    }
+});

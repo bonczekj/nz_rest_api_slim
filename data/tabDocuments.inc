@@ -24,11 +24,26 @@ class tabDocuments extends dbTable
         }
     }
 
-    function insert($type, $filename, $description, $expiration)
+    function readDocument($documentId)
+    {
+        try {
+            $query = $this->conn->prepare('select * from ' . $this->tabName . ' where id = ?');
+            $query->bindValue(1, $documentId, PDO::PARAM_INT);
+            $query->execute();
+            return $query->fetch(PDO::FETCH_ASSOC);
+            //return $query;
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+        }
+    }
+
+    function insert($type, $filename, $description, $expiration, $techname)
     {
         try {
             $filename = basename($filename);
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (type, filename, description, expiration) VALUES (?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (type, filename, description, expiration, techname) VALUES (?, ?, ?, ?, ?)');
             $query->bindValue(1, $type, PDO::PARAM_STR);
             $query->bindValue(2, $filename, PDO::PARAM_STR);
             $query->bindValue(3, $description, PDO::PARAM_STR);
@@ -39,6 +54,7 @@ class tabDocuments extends dbTable
                 $query->bindValue(4, $expiration, PDO::PARAM_STR);
             }*/
             $query->bindValue(4, $expiration, PDO::PARAM_STR);
+            $query->bindValue(5, $techname, PDO::PARAM_STR);
             $query->execute();
             $lastId = $this->conn->lastInsertId();
             return $lastId;

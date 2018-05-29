@@ -10,9 +10,15 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 require './vendor/autoload.php';
 require './data/logger.inc';
-$container['upload_directory'] = __DIR__ . '/uploads';
 
-$app = new \Slim\App;
+
+$container = new \Slim\Container;
+$container['upload_directory'] = dirname(getcwd()).'\documents';
+$app = new \Slim\App($container);
+
+//$app = new \Slim\App;
+//$container = $app->getContainer();
+//$container['upload_directory'] = __DIR__ . '/uploads';
 
 error_reporting(E_ALL & ~E_NOTICE);
 
