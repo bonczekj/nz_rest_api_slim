@@ -61,14 +61,6 @@ $app->add(new \Slim\Middleware\TokenAuthentication([
     "relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],
 ]));
 
-
-$app->get('/hello/{name}', function (Request $request, Response $response, array $args) {
-    //$tabDocuments1 = new tabDocuments();
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
-    return $response;
-});
-
 include './app/routes/documents.php';
 include './app/routes/doctype.php';
 include './app/routes/users.php';
