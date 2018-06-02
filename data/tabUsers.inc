@@ -142,4 +142,24 @@ class tabUsers extends dbTable
     }
 
 
+    public function changePassword($email, $password){
+        try {
+            $query = $this->conn->prepare("update " . $this->tabName. " set password = ? where email = ?");
+            $query->bindValue(1, $password, PDO::PARAM_STR);
+            $query->bindValue(2, $email, PDO::PARAM_STR);
+            $query->execute();
+
+            $to = "jiri.bonczek@volny.cz";
+            $subject = "My subject";
+            $txt = "Hello world!";
+            $headers = "From: webmaster@example.com";
+
+            mail($to, $subject, $txt, $headers);
+        }
+        catch(PDOException $e)
+        {
+            throw new Exception('Chyba při ukládání: '.$e->getMessage());
+        }
+    }
+
 }

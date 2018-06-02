@@ -29,7 +29,24 @@ $app->post('/login', function (Request $request, Response $response, array $args
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+
+$app->post('/login/changepassword', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabUsers = new tabUsers();
+        $user = $tabUsers->changePassword( $data['email'], $data['password']);
+        return $response->withHeader('Content-Type', 'text/html')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        return $response->withHeader('Content-Type', 'text/html')
             ->withStatus(460, 'Error')
             ->withBody($e->getMessage());
     }
