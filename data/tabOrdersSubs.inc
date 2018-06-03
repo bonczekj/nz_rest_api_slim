@@ -13,6 +13,10 @@ class tabOrdersSubs extends dbTable
     protected $tabName = 'orderssubs';
     protected $vName = 'v_orderssubs';
 
+    /**
+     * @param $idorder
+     * @return PDOStatement
+     */
     public function readAll($idorder){
         $query = $this->conn->prepare('SELECT * FROM ' . $this->vName. ' where idorder = ?' );
         $query->bindValue(1, $idorder, PDO::PARAM_STR);
@@ -20,16 +24,17 @@ class tabOrdersSubs extends dbTable
         return $query;
     }
 
-    function insert($idorder, $ico, $taskdate, $finished, $price, $invoice)
+    /**
+     * @param $idorder
+     * @param $ico
+     * @throws Exception
+     */
+    function insert($idorder, $ico)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico, taskdate, finished, price, invoice) VALUES (?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico) VALUES (?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $idorder, PDO::PARAM_STR);
             $query->bindValue(2, $ico, PDO::PARAM_STR);
-            $query->bindValue(3, $taskdate, PDO::PARAM_STR);
-            $query->bindValue(4, $finished, PDO::PARAM_STR);
-            $query->bindValue(5, $price, PDO::PARAM_INT);
-            $query->bindValue(6, $invoice, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -39,15 +44,17 @@ class tabOrdersSubs extends dbTable
         }
     }
 
-    function update($idorder, $idsub, $ico, $taskdate, $finished, $price, $invoice)
+    /**
+     * @param $idorder
+     * @param $idsub
+     * @param $ico
+     * @throws Exception
+     */
+    function update($idorder, $idsub, $ico)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set ico = ?, taskdate = ?, finished = ?, price = ?, invoice = ?  where idsub = ? and idorder = ?');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set ico = ? where idsub = ? and idorder = ?');
             $query->bindValue(1, $ico, PDO::PARAM_STR);
-            $query->bindValue(2, $taskdate, PDO::PARAM_STR);
-            $query->bindValue(3, $finished, PDO::PARAM_STR);
-            $query->bindValue(4, $price, PDO::PARAM_INT);
-            $query->bindValue(5, $invoice, PDO::PARAM_STR);
             $query->bindValue(6, $idsub, PDO::PARAM_STR);
             $query->bindValue(7, $idorder, PDO::PARAM_STR);
             $query->execute();
@@ -59,6 +66,11 @@ class tabOrdersSubs extends dbTable
         }
     }
 
+    /**
+     * @param $idsub
+     * @param $idorder
+     * @throws Exception
+     */
     function delete($idsub, $idorder)
     {
         try {

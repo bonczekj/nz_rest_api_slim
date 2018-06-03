@@ -25,9 +25,9 @@ $app->get('/documents', function (Request $request, Response $response, array $a
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -45,9 +45,9 @@ $app->post('/documents', function (Request $request, Response $response, array $
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -64,9 +64,9 @@ $app->post('/documents/delete', function (Request $request, Response $response, 
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -82,9 +82,9 @@ $app->post('/documents/create', function (Request $request, Response $response, 
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -115,9 +115,9 @@ $app->post('/fileupload', function (Request $request, Response $response, array 
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -162,10 +162,8 @@ $app->post('/filedownload', function (Request $request, Response $response, arra
     }
     catch(Exception $e)
     {
-        $body = $response->getBody();
-        $body->write($e->getMessage());
-        return $response->withHeader('Content-Type', 'application/json')
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
             ->withStatus(460, 'Error');
-            //->withBody($e->getMessage());
     }
 });

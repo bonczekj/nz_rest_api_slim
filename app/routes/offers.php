@@ -24,9 +24,9 @@ $app->get('/offers', function (Request $request, Response $response, array $args
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -45,9 +45,9 @@ $app->post('/offers/update', function (Request $request, Response $response, arr
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -66,9 +66,9 @@ $app->post('/offers/delete', function (Request $request, Response $response, arr
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -87,9 +87,9 @@ $app->post('/offers/create', function (Request $request, Response $response, arr
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -109,9 +109,9 @@ $app->post('/offers/createorder', function (Request $request, Response $response
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 

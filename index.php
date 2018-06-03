@@ -71,6 +71,7 @@ include './app/routes/orders.php';
 include './app/routes/ordersDocuments.php';
 include './app/routes/ordersTasks.php';
 include './app/routes/ordersSubs.php';
+include './app/routes/ordersSubsDetail.php';
 include './app/routes/tasks.php';
 include './app/routes/login.php';
 

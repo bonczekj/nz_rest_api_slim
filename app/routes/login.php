@@ -46,8 +46,8 @@ $app->post('/login/changepassword', function (Request $request, Response $respon
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'text/html')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });

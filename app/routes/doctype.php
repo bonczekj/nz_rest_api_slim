@@ -23,9 +23,9 @@ $app->get('/doctype', function (Request $request, Response $response, array $arg
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -40,9 +40,9 @@ $app->post('/doctype', function (Request $request, Response $response, array $ar
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -58,9 +58,9 @@ $app->post('/doctype/create', function (Request $request, Response $response, ar
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -75,9 +75,9 @@ $app->post('/doctype/delete', function (Request $request, Response $response, ar
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 

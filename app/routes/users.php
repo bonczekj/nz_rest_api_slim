@@ -22,13 +22,10 @@ $app->get('/users', function (Request $request, Response $response, array $args)
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
-        //->withHeader('Access-Control-Allow-Origin', '*')
-        //->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-        //->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
 });
 
 $app->post('/users/list', function (Request $request, Response $response, array $args) {
@@ -39,14 +36,12 @@ $app->post('/users/list', function (Request $request, Response $response, array 
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
-            //->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
-            //->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -61,9 +56,9 @@ $app->post('/users', function (Request $request, Response $response, array $args
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -78,11 +73,9 @@ $app->post('/users/delete', function (Request $request, Response $response, arra
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            //->withHeader('Access-Control-Allow-Origin', '*')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
-
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -97,9 +90,9 @@ $app->post('/users/create', function (Request $request, Response $response, arra
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(460, 'Error')
-            ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 

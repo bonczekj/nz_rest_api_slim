@@ -25,9 +25,9 @@ $app->post('/offersdocuments', function (Request $request, Response $response, a
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -42,9 +42,9 @@ $app->post('/offersdocuments/delete', function (Request $request, Response $resp
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
@@ -59,9 +59,9 @@ $app->post('/offersdocuments/create', function (Request $request, Response $resp
     }
     catch(Exception $e)
     {
-        return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(460, 'Error')
-                        ->withBody($e->getMessage());
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
     }
 });
 
