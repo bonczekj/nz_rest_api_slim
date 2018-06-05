@@ -14,8 +14,6 @@ include_once './data/tabOrdersDocuments.inc';
 $app->post('/ordersdocuments', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        //$logger = new logger();
-        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersDocuments = new tabOrdersDocuments();
         $stmt = $tabOrdersDocuments->readAll($data['id']);
@@ -35,8 +33,6 @@ $app->post('/ordersdocuments', function (Request $request, Response $response, a
 $app->post('/ordersdocuments/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
-        //$logger = new logger();
-        //$logger->insert($json, "");
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersDocuments = new tabOrdersDocuments();
         $tabOrdersDocuments->delete($data['idorder'], $data['iddocument']);

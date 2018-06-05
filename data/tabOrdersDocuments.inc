@@ -38,9 +38,16 @@ class tabOrdersDocuments extends dbTable
 
     function delete($idorder, $iddocument)
     {
-        $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idorder = ? and iddocument = ?');
-        $query->bindParam(1, $idorder, PDO::PARAM_STR);
-        $query->bindParam(1, $iddocument, PDO::PARAM_INT);
-        $query->execute();
+        try {
+            $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idorder = ? and iddocument = ?');
+            $query->bindParam(1, $idorder, PDO::PARAM_STR);
+            $query->bindParam(2, $iddocument, PDO::PARAM_INT);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
     }
 }

@@ -32,7 +32,7 @@ class tabOrdersSubs extends dbTable
     function insert($idorder, $ico)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico) VALUES (?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico) VALUES (?, ?)');
             $query->bindValue(1, $idorder, PDO::PARAM_STR);
             $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->execute();

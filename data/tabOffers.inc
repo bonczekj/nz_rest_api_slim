@@ -58,15 +58,15 @@ class tabOffers extends dbTable
         }
     }
 
-    function insert($name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function insert($name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
         $id = $this->getID();
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, customer, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
-            $query->bindValue(3, $customer, PDO::PARAM_STR);
-            $query->bindValue(4, $processdate, PDO::PARAM_INT);
+            $query->bindValue(3, $ico, PDO::PARAM_STR);
+            $query->bindValue(4, $processdate, PDO::PARAM_STR);
             $query->bindValue(5, $processtime, PDO::PARAM_STR);
             $query->bindValue(6, $deliverytype, PDO::PARAM_STR);
             $query->bindValue(7, $errand, PDO::PARAM_STR);
@@ -81,12 +81,12 @@ class tabOffers extends dbTable
         }
     }
 
-    function update($id, $name, $customer, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
         try {
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
-            $query->bindValue(2, $customer, PDO::PARAM_STR);
+            $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
             $query->bindValue(4, $processtime, PDO::PARAM_STR);
             $query->bindValue(5, $deliverytype, PDO::PARAM_STR);

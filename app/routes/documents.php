@@ -138,7 +138,7 @@ $app->post('/filedownload', function (Request $request, Response $response, arra
         $tabDocuments = new tabDocuments();
         $document = $tabDocuments->readDocument($data['id']);
 
-        $file = $directory . "\\" . $document['techname'];
+        $file = $directory . DIRECTORY_SEPARATOR . $document['techname'];
 
         if (file_exists($file)){
             $fh = fopen($file, 'rb');
@@ -159,6 +159,21 @@ $app->post('/filedownload', function (Request $request, Response $response, arra
         }
         //readfile($file);
         //return $response;
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+
+$app->post('/fut', function (Request $request, Response $response, array $args) {
+    try {
+        $directory = $this->get('upload_directory');
+        $response->getBody()->write(dirname(getcwd()). " ");
+        $response->getBody()->write(dirname(__DIR__)." ");
+        $response->getBody()->write(dirname(dirname(getcwd())). " ");
     }
     catch(Exception $e)
     {

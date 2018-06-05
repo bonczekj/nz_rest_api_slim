@@ -53,7 +53,7 @@ class tabCustomers extends dbTable
     {
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub, dealtype) VALUES (?, ?, ?, ?, ?, ?)');
-            $query->bindValue(1, $data['$ico'], PDO::PARAM_STR);
+            $query->bindValue(1, $data['ico'], PDO::PARAM_STR);
             $query->bindValue(2, $data['name'], PDO::PARAM_STR);
             $query->bindValue(3, $data['profession'], PDO::PARAM_STR);
             $query->bindValue(4, $data['address'], PDO::PARAM_STR);

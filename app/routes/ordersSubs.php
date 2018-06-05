@@ -52,7 +52,7 @@ $app->post('/orderssubs/create', function (Request $request, Response $response,
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersSubs = new tabOrdersSubs();
-        $tabOrdersSubs->insert($data['idorder'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
+        $tabOrdersSubs->insert($data['idorder'], $data['ico']);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }

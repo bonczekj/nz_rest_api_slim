@@ -36,7 +36,7 @@ class LoggerMiddleware
         if ($response->getStatusCode() != 200 ){
             $response->getBody()->rewind();
             $body = $response->getBody()->getContents();
-            $logger->insert($json, $body);
+            $logger->insert($json, $body );
         }
         return $response;
     }
