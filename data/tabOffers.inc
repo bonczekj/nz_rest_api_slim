@@ -84,7 +84,7 @@ class tabOffers extends dbTable
     function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, customer = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
             $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
