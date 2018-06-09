@@ -80,11 +80,11 @@ class tabOrdersSubsDetail extends dbTable
      * @param $idsubdetil
      * @throws Exception
      */
-    function delete($idsubdetil)
+    function delete($idsubdetail)
     {
         try {
             $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where idsubdetail = ?');
-            $query->bindParam(1, $idsubdetil, PDO::PARAM_INT);
+            $query->bindParam(1, $idsubdetail, PDO::PARAM_INT);
             $query->execute();
         }
         catch(PDOException $e)

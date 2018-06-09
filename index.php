@@ -77,5 +77,6 @@ include './app/routes/ordersSubs.php';
 include './app/routes/ordersSubsDetail.php';
 include './app/routes/tasks.php';
 include './app/routes/login.php';
+include './app/routes/centers.php';
 
 $app->run();

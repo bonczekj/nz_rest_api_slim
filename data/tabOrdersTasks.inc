@@ -24,12 +24,13 @@ class tabOrdersTasks extends dbTable
     function insert($data)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskdesc, finished, price) VALUES (?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskdesc, finished, price, invoice) VALUES (?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['idorder'], PDO::PARAM_STR);
             $query->bindValue(2, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(3, $data['taskdesc'], PDO::PARAM_STR);
             $query->bindValue(4, $data['finished'], PDO::PARAM_INT);
             $query->bindValue(5, $data['price'], PDO::PARAM_INT);
+            $query->bindValue(6, $data['invoice'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -43,13 +44,14 @@ class tabOrdersTasks extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, taskdesc = ?, finished = ?, price = ? where idtask = ? and idorder = ?');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, taskdesc = ?, finished = ?, price = ?, invoice = ? where idtask = ? and idorder = ?');
             $query->bindValue(1, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(2, $data['taskdesc'], PDO::PARAM_STR);
             $query->bindValue(3, $data['finished'], PDO::PARAM_INT);
             $query->bindValue(4, $data['price'], PDO::PARAM_INT);
-            $query->bindValue(5, $data['idtask'], PDO::PARAM_INT);
-            $query->bindValue(6, $data['idorder'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['invoice'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['idtask'], PDO::PARAM_INT);
+            $query->bindValue(7, $data['idorder'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

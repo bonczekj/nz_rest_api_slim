@@ -9,14 +9,12 @@
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
-include_once './data/tabOrdersSubs.inc';
+include_once './data/tabCenters.inc';
 
-$app->post('/orderssubs', function (Request $request, Response $response, array $args) {
+$app->get('/centers', function (Request $request, Response $response, array $args) {
+    $tabCenters = new tabCenters();
     try {
-        $json = $request->getBody();
-        $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrdersSubs = new tabOrdersSubs();
-        $stmt = $tabOrdersSubs->readAll($data['id']);
+        $stmt = $tabCenters->readAll();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -30,19 +28,14 @@ $app->post('/orderssubs', function (Request $request, Response $response, array 
     }
 });
 
-$app->post('/orderssubs/delete', function (Request $request, Response $response, array $args) {
+$app->post('/centers/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-
-        $tabOrdersSubs = new tabOrdersSubs();
-        $tabOrdersSubs->delete($data['idsub'], $data['idorder']);
-
-        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
-        $tabOrdersSubsDetail->delete($data['idsubdetail']);
-
+        $tabCenters= new tabCenters();
+        $tabCenters->update( $data );
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(200, 'OK');
+                        ->withStatus(200, 'Saved');
     }
     catch(Exception $e)
     {
@@ -52,20 +45,14 @@ $app->post('/orderssubs/delete', function (Request $request, Response $response,
     }
 });
 
-$app->post('/orderssubs/create', function (Request $request, Response $response, array $args) {
+$app->post('/centers/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrdersSubs = new tabOrdersSubs();
-        //$tabOrdersSubs->insert($data['idorder'], $data['ico']);
-        $lastId = $tabOrdersSubs->insert($data);
-
-        $data['idsub'] = $lastId;
-        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
-        $tabOrdersSubsDetail->insert($data);
-
+        $tabCenters= new tabCenters();
+        $tabCenters->delete( $data );
         return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(200, 'OK');
+                        ->withStatus(200, 'Deleted');
     }
     catch(Exception $e)
     {
@@ -75,19 +62,14 @@ $app->post('/orderssubs/create', function (Request $request, Response $response,
     }
 });
 
-$app->post('/orderssubs/update', function (Request $request, Response $response, array $args) {
+$app->post('/centers/create', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOrdersSubs = new tabOrdersSubs();
-        //$tabOrdersSubs->update( $data['idorder'], $data['idsub'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
-        $tabOrdersSubs->update( $data );
-
-        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
-        $tabOrdersSubsDetail->update($data);
-
+        $tabCenters= new tabCenters();
+        $tabCenters->insert( $data );
         return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(200, 'OK');
+            ->withStatus(200, 'Created');
     }
     catch(Exception $e)
     {

@@ -30,7 +30,7 @@ class LoggerMiddleware
             $logger->insert($json, "");
         }
         if ($request->isGet()) {
-            $logger->insert($json, "");
+            //$logger->insert($json, "");
         }
         $response = $next($request, $response);
         if ($response->getStatusCode() != 200 ){
