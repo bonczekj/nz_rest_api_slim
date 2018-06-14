@@ -12,21 +12,23 @@ include_once "./data/tabDocuments.inc";
 class tabOrdersDocuments extends dbTable
 {
     protected $tabName = 'ordersdocuments';
+    protected $v_tabName = 'v_ordersdocuments';
 
     public function readAll($idorder){
-        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ', documents where iddocument = documents.id and idorder = ?' );
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->v_tabName. ' where idorder = ?' );
         $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;
     }
 
-    function insert($idorder, $iddocument, $typeRS)
+    function insert($idorder, $iddocument, $typeRS, $ico)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, iddocument, typeRS) VALUES (?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, iddocument, typeRS, ico) VALUES (?, ?, ?, ?)');
             $query->bindValue(1, $idorder, PDO::PARAM_STR);
             $query->bindValue(2, $iddocument, PDO::PARAM_INT);
             $query->bindValue(3, $typeRS, PDO::PARAM_STR);
+            $query->bindValue(4, $ico, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

@@ -29,13 +29,16 @@ class tabOrdersSubs extends dbTable
      * @param $ico
      * @throws Exception
      */
-    function insert($idorder, $ico)
+    //function insert($idorder, $ico)
+    function insert($data)
     {
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, ico) VALUES (?, ?)');
-            $query->bindValue(1, $idorder, PDO::PARAM_STR);
-            $query->bindValue(2, $ico, PDO::PARAM_STR);
+            $query->bindValue(1, $data['idorder'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['ico'], PDO::PARAM_STR);
             $query->execute();
+            $lastId = $this->conn->lastInsertId();
+            return $lastId;
         }
         catch(PDOException $e)
         {
@@ -50,13 +53,14 @@ class tabOrdersSubs extends dbTable
      * @param $ico
      * @throws Exception
      */
-    function update($idorder, $idsub, $ico)
+    //function update($idorder, $idsub, $ico)
+    function update($data)
     {
         try {
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set ico = ? where idsub = ? and idorder = ?');
-            $query->bindValue(1, $ico, PDO::PARAM_STR);
-            $query->bindValue(6, $idsub, PDO::PARAM_STR);
-            $query->bindValue(7, $idorder, PDO::PARAM_STR);
+            $query->bindValue(1, $data['ico'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['idsub'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['idorder'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

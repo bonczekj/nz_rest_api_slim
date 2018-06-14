@@ -8,16 +8,13 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
-use Slim\Http\UploadedFile;
 
-include_once './data/tabOffersDocuments.inc';
+include_once './data/tabCenters.inc';
 
-$app->post('/offersdocuments', function (Request $request, Response $response, array $args) {
+$app->get('/centers', function (Request $request, Response $response, array $args) {
+    $tabCenters = new tabCenters();
     try {
-        $json = $request->getBody();
-        $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOffersDocuments = new tabOffersDocuments();
-        $stmt = $tabOffersDocuments->readAll($data['id']);
+        $stmt = $tabCenters->readAll();
         $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
@@ -31,14 +28,14 @@ $app->post('/offersdocuments', function (Request $request, Response $response, a
     }
 });
 
-$app->post('/offersdocuments/delete', function (Request $request, Response $response, array $args) {
+$app->post('/centers/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOffersDocuments = new tabOffersDocuments();
-        $tabOffersDocuments->delete($data['idoffer'], $data['iddocument']);
+        $tabCenters= new tabCenters();
+        $tabCenters->update( $data );
         return $response->withHeader('Content-Type', 'application/json')
-                        ->withStatus(200, 'OK');
+                        ->withStatus(200, 'Saved');
     }
     catch(Exception $e)
     {
@@ -48,14 +45,31 @@ $app->post('/offersdocuments/delete', function (Request $request, Response $resp
     }
 });
 
-$app->post('/offersdocuments/create', function (Request $request, Response $response, array $args) {
+$app->post('/centers/delete', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
-        $tabOffersDocuments = new tabOffersDocuments();
-        $tabOffersDocuments->insert($data['idoffer'], $data['documentId'], $data['typeRS'] );
+        $tabCenters= new tabCenters();
+        $tabCenters->delete( $data );
         return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(200, 'OK');
+                        ->withStatus(200, 'Deleted');
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+
+$app->post('/centers/create', function (Request $request, Response $response, array $args) {
+    try {
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabCenters= new tabCenters();
+        $tabCenters->insert( $data );
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'Created');
     }
     catch(Exception $e)
     {

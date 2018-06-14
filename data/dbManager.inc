@@ -25,7 +25,7 @@ class dbManager{
             $this->db_name = "id4307761_en";
             $this->username = "id4307761_jirka";
             $this->password = "jirka";
-        }elseif ($_SERVER['SERVER_NAME'] === "nztest.atris.cz"){
+        }elseif ($_SERVER['SERVER_NAME'] === "Xnz.atris.cz"){
             $this->host = "uvdb36.active24.cz";
             $this->db_name = "nzatriscztest";
             $this->username = "nzatriscztest";

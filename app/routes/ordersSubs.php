@@ -34,8 +34,13 @@ $app->post('/orderssubs/delete', function (Request $request, Response $response,
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
+
         $tabOrdersSubs = new tabOrdersSubs();
         $tabOrdersSubs->delete($data['idsub'], $data['idorder']);
+
+        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
+        $tabOrdersSubsDetail->delete($data['idsubdetail']);
+
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }
@@ -52,7 +57,13 @@ $app->post('/orderssubs/create', function (Request $request, Response $response,
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersSubs = new tabOrdersSubs();
-        $tabOrdersSubs->insert($data['idorder'], $data['ico']);
+        //$tabOrdersSubs->insert($data['idorder'], $data['ico']);
+        $lastId = $tabOrdersSubs->insert($data);
+
+        $data['idsub'] = $lastId;
+        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
+        $tabOrdersSubsDetail->insert($data);
+
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }
@@ -69,7 +80,12 @@ $app->post('/orderssubs/update', function (Request $request, Response $response,
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersSubs = new tabOrdersSubs();
-        $tabOrdersSubs->update( $data['idorder'], $data['idsub'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
+        //$tabOrdersSubs->update( $data['idorder'], $data['idsub'], $data['ico'], $data['taskdate'], $data['finished'], $data['price'], $data['invoice']);
+        $tabOrdersSubs->update( $data );
+
+        $tabOrdersSubsDetail = new tabOrdersSubsDetail();
+        $tabOrdersSubsDetail->update($data);
+
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }

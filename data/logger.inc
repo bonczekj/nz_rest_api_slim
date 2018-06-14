@@ -27,7 +27,13 @@ class LoggerMiddleware
         $logger = new logger();
         $json = $request->getBody();
         if ($request->isPost()) {
-            $logger->insert($json, "");
+            try {
+                $logger->insert($json, "");
+            }
+            catch(Exception $e)
+            {
+                $logger->insert('', $e->getMessage());
+            }
         }
         if ($request->isGet()) {
             //$logger->insert($json, "");

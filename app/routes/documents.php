@@ -104,13 +104,53 @@ $app->post('/fileupload', function (Request $request, Response $response, array 
             $tabDocuments = new tabDocuments();
             $fileId = $tabDocuments->insert( '', $fileName, '', null, $techName);
             return $response->withJson(['docID' => $fileId])->withStatus(200, 'OK')
-              ->withHeader('Content-Type', 'application/json');
+                ->withHeader('Content-Type', 'application/json');
         }else {
             return $response
                 ->withJson([
                     'error' => 'Nothing was uploaded'
                 ])->withStatus(460)
-                  ->withHeader('Content-Type', 'application/json');
+                ->withHeader('Content-Type', 'application/json');
+        }
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+
+$app->post('/fileupload1', function (Request $request, Response $response, array $args) {
+    try {
+        $directory = $this->get('upload_directory');
+        $json = $request->getBody();
+        $data = json_decode($json, true); // parse the JSON into an assoc. array
+
+        /*$files = $request->getUploadedFiles();
+        foreach ($files as &$value) {
+            $uploadedFile = $value;
+        }*/
+
+        //$file = $files['file'];
+
+        $fileContent = base64_decode($data['content']);
+
+        $extension = pathinfo($data['name'], PATHINFO_EXTENSION);
+        $basename = bin2hex(random_bytes(8)); // see http://php.net/manual/en/function.random-bytes.php
+        $fileName = sprintf('%s.%0.8s', $basename, $extension);
+
+        if (file_put_contents( $directory . DIRECTORY_SEPARATOR . $fileName, $fileContent ) === false) {
+            return $response
+                ->withJson([
+                    'error' => 'Nothing was uploaded'
+                ])->withStatus(460)
+                ->withHeader('Content-Type', 'application/json');
+        }else {
+            $tabDocuments = new tabDocuments();
+            $fileId = $tabDocuments->insert( '', $data['name'], '', null, $fileName);
+            return $response->withJson(['docID' => $fileId])->withStatus(200, 'OK')
+                            ->withHeader('Content-Type', 'application/json');
         }
     }
     catch(Exception $e)
