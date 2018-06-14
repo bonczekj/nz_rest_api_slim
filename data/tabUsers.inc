@@ -26,16 +26,19 @@ class tabUsers extends dbTable
         }
     }
 
-    function insert($username, $email, $password = "xxx", $firstname = "", $lastname = "")
+    //function insert($username, $email, $password = "xxx", $firstname = "", $lastname = "")
+    function insert($data)
     {
-        $password = is_null($password) ? '' : $password;
+        $password = is_null($data['password']) ? '123' : $data['password'];
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (username, email, password, firstname, lastname) VALUES (?, ?, ?, ?, ?)');
-            $query->bindValue(1, $username, PDO::PARAM_STR);
-            $query->bindValue(2, $email, PDO::PARAM_STR);
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (username, email, password, firstname, lastname, salesdata, techdata) VALUES (?, ?, ?, ?, ?, ?, ?)');
+            $query->bindValue(1, $data['username'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['email'], PDO::PARAM_STR);
             $query->bindValue(3, $password, PDO::PARAM_STR);
-            $query->bindValue(4, $firstname, PDO::PARAM_STR);
-            $query->bindValue(5, $lastname, PDO::PARAM_STR);
+            $query->bindValue(4, $data['firstname'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['lastname'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['salesData'], PDO::PARAM_INT);
+            $query->bindValue(7, $data['techData'], PDO::PARAM_INT);
             $query->execute();
         }
         catch(PDOException $e)
@@ -46,15 +49,17 @@ class tabUsers extends dbTable
         }
     }
 
-    function update($username, $email, $firstname, $lastname, $salesData)
+    //function update($username, $email, $firstname, $lastname, $salesData)
+    function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, firstname = ?, lastname = ?, salesData = ? where email = ? ');
-            $query->bindValue(1, $username, PDO::PARAM_STR);
-            $query->bindValue(2, $firstname, PDO::PARAM_STR);
-            $query->bindValue(3, $lastname, PDO::PARAM_STR);
-            $query->bindValue(4, $salesData, PDO::PARAM_INT);
-            $query->bindValue(5, $email, PDO::PARAM_STR);
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, firstname = ?, lastname = ?, salesData = ? , techData = ? where email = ? ');
+            $query->bindValue(1, $data['username'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['firstname'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['lastname'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['salesData'], PDO::PARAM_INT);
+            $query->bindValue(5, $data['techData'], PDO::PARAM_INT);
+            $query->bindValue(6, $data['email'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

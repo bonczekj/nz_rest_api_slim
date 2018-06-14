@@ -39,9 +39,9 @@ class tabOrders extends dbTable
         }
     }
 
-    /*public function readById($id){
+    public function readById($id){
         try {
-            $query = $this->conn->prepare("SELECT * FROM " . $this->v_Orders . " where id = ?");
+            $query = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where id = ?");
             $query->bindValue(1, $id, PDO::PARAM_STR);
             $query->execute();
             return $query;
@@ -49,9 +49,9 @@ class tabOrders extends dbTable
         catch(PDOException $e)
         {
             print "Error!: " . $e->getMessage() . "<br/>";
-            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+            throw new Exception('Chyba při čtení. '.$e->getMessage());
         }
-    }*/
+    }
 
     function getID(){
         try {

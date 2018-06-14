@@ -52,7 +52,7 @@ $app->post('/ordersdocuments/create', function (Request $request, Response $resp
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOrdersDocuments = new tabOrdersDocuments();
-        $tabOrdersDocuments->insert($data['idorder'], $data['documentId'], $data['typeRS'] );
+        $tabOrdersDocuments->insert($data['idorder'], $data['documentId'], $data['typeRS'], $data['ico'] );
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'OK');
     }

@@ -45,12 +45,13 @@ $app->post('/users/list', function (Request $request, Response $response, array 
     }
 });
 
-$app->post('/users', function (Request $request, Response $response, array $args) {
+$app->post('/users/update', function (Request $request, Response $response, array $args) {
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabUsers= new tabUsers();
-        $tabUsers->update( $data['username'], $data['email'], $data['firstname'], $data['lastname'], $data['salesData']);
+        //$tabUsers->update( $data['username'], $data['email'], $data['firstname'], $data['lastname'], $data['salesData']);
+        $tabUsers->update($data);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'Saved');
     }

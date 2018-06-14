@@ -36,7 +36,7 @@ $app->post('/offersdocuments/delete', function (Request $request, Response $resp
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabOffersDocuments = new tabOffersDocuments();
-        $tabOffersDocuments->delete($data['idoffer'], $data['documentId']);
+        $tabOffersDocuments->delete($data['idoffer'], $data['iddocument']);
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }

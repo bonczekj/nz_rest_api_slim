@@ -52,13 +52,15 @@ class tabCustomers extends dbTable
     function insert($data)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub, dealtype) VALUES (?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (ico, name, profession, address, sub, dealtype, mobil, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['ico'], PDO::PARAM_STR);
             $query->bindValue(2, $data['name'], PDO::PARAM_STR);
             $query->bindValue(3, $data['profession'], PDO::PARAM_STR);
             $query->bindValue(4, $data['address'], PDO::PARAM_STR);
             $query->bindValue(5, $data['sub'], PDO::PARAM_INT);
             $query->bindValue(6, $data['dealtype'], PDO::PARAM_STR);
+            $query->bindValue(7, $data['mobil'], PDO::PARAM_STR);
+            $query->bindValue(8, $data['email'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -70,12 +72,14 @@ class tabCustomers extends dbTable
 
     function update($data)
     {
-        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, profession = ?, address = ?, dealtype = ? where ico = ? ');
+        $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, profession = ?, address = ?, dealtype = ?, mobil = ?, email = ? where ico = ? ');
         $query->bindValue(1, $data['name'], PDO::PARAM_STR);
         $query->bindValue(2, $data['profession'], PDO::PARAM_STR);
         $query->bindValue(3, $data['address'], PDO::PARAM_STR);
         $query->bindValue(4, $data['dealtype'], PDO::PARAM_STR);
-        $query->bindValue(5, $data['ico'], PDO::PARAM_STR);
+        $query->bindValue(5, $data['mobil'], PDO::PARAM_STR);
+        $query->bindValue(6, $data['email'], PDO::PARAM_STR);
+        $query->bindValue(7, $data['ico'], PDO::PARAM_STR);
         $query->execute();
     }
 

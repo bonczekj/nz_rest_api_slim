@@ -131,7 +131,7 @@ $app->post('/orders/linkoffer', function (Request $request, Response $response, 
     }
 });
 
-/*$app->get('/orders/{id}', function (Request $request, Response $response, array $args) {
+$app->get('/orders/read/{id}', function (Request $request, Response $response, array $args) {
     try {
         $tabOrders = new tabOrders();
         $stmt = $tabOrders->readById($args['id']);
@@ -146,4 +146,4 @@ $app->post('/orders/linkoffer', function (Request $request, Response $response, 
             ->withStatus(460, 'Error')
             ->withBody($e->getMessage());
     }
-});*/
+});
