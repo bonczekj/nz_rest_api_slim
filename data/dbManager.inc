@@ -25,12 +25,12 @@ class dbManager{
             $this->db_name = "id4307761_en";
             $this->username = "id4307761_jirka";
             $this->password = "jirka";
-        }elseif ($_SERVER['SERVER_NAME'] === "nz.atris.cz"){
+        }elseif ($_SERVER['SERVER_NAME'] === "nztest.atris.cz"){
             $this->host = "uvdb36.active24.cz";
             $this->db_name = "nzatriscztest";
             $this->username = "nzatriscztest";
             $this->password = "8AaRYzt0NE";
-        }elseif ($_SERVER['SERVER_NAME'] === "nzz.atris.cz"){
+        }elseif ($_SERVER['SERVER_NAME'] === "nz.atris.cz"){
             $this->host = "uvdb36.active24.cz";
             $this->db_name = "nzatriscz";
             $this->username = "nzatriscz";
