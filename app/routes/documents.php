@@ -176,7 +176,7 @@ $app->post('/filedownload', function (Request $request, Response $response, arra
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabDocuments = new tabDocuments();
-        $document = $tabDocuments->readDocument($data['id']);
+        $document = $tabDocuments->readDocument($data['iddocument']);
 
         $file = $directory . DIRECTORY_SEPARATOR . $document['techname'];
 
