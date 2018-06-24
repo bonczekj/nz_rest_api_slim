@@ -7,14 +7,14 @@
  */
 
 include_once "./data/dbTable.inc";
-include_once "./data/tabDocuments.inc";
 
-class tabOrdersTasks extends dbTable
+class tabOrdersCentTasks extends dbTable
 {
-    protected $tabName = 'orderstasks';
+    protected $tabName = 'orderscenttasks';
+    protected $v_tabName = 'v_orderscenttasks';
 
     public function readAll($idorder){
-        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ' where idorder = ?' );
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->v_tabName. ' where idorder = ? order by taskdate' );
         $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;
@@ -24,15 +24,12 @@ class tabOrdersTasks extends dbTable
     function insert($data)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskdesc, finished, price, invoice, note, planinvdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskcentdesc, finished, idcenter) VALUES (?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['idorder'], PDO::PARAM_STR);
             $query->bindValue(2, $data['taskdate'], PDO::PARAM_STR);
-            $query->bindValue(3, $data['taskdesc'], PDO::PARAM_STR);
-            $query->bindValue(4, $data['finished'], PDO::PARAM_INT);
-            $query->bindValue(5, $data['price'], PDO::PARAM_INT);
-            $query->bindValue(6, $data['invoice'], PDO::PARAM_STR);
-            $query->bindValue(7, $data['note'], PDO::PARAM_STR);
-            $query->bindValue(8, $data['planinvdate'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['taskcentdesc'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['finished'], PDO::PARAM_STR);
+            $query->bindValue(5, $data['idcenter'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -46,16 +43,13 @@ class tabOrdersTasks extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, taskdesc = ?, finished = ?, price = ?, invoice = ?, note = ?, planinvdate = ? where idtask = ? and idorder = ?');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, taskcentdesc = ?, finished = ?, idcenter = ? where idtask = ? and idorder = ?');
             $query->bindValue(1, $data['taskdate'], PDO::PARAM_STR);
-            $query->bindValue(2, $data['taskdesc'], PDO::PARAM_STR);
-            $query->bindValue(3, $data['finished'], PDO::PARAM_INT);
-            $query->bindValue(4, $data['price'], PDO::PARAM_INT);
-            $query->bindValue(5, $data['invoice'], PDO::PARAM_STR);
-            $query->bindValue(6, $data['note'], PDO::PARAM_STR);
-            $query->bindValue(7, $data['planinvdate'], PDO::PARAM_STR);
-            $query->bindValue(8, $data['idtask'], PDO::PARAM_INT);
-            $query->bindValue(9, $data['idorder'], PDO::PARAM_STR);
+            $query->bindValue(2, $data['taskcentdesc'], PDO::PARAM_STR);
+            $query->bindValue(3, $data['finished'], PDO::PARAM_STR);
+            $query->bindValue(4, $data['idcenter'], PDO::PARAM_INT);
+            $query->bindValue(5, $data['idtask'], PDO::PARAM_INT);
+            $query->bindValue(6, $data['idorder'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)

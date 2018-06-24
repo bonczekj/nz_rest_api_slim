@@ -31,7 +31,7 @@ class tabUsers extends dbTable
     {
         $password = is_null($data['password']) ? '123' : $data['password'];
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (username, email, password, firstname, lastname, salesdata, techdata) VALUES (?, ?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (username, email, password, firstname, lastname, salesdata, techdata, allowedIP) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['username'], PDO::PARAM_STR);
             $query->bindValue(2, $data['email'], PDO::PARAM_STR);
             $query->bindValue(3, $password, PDO::PARAM_STR);
@@ -39,6 +39,7 @@ class tabUsers extends dbTable
             $query->bindValue(5, $data['lastname'], PDO::PARAM_STR);
             $query->bindValue(6, $data['salesData'], PDO::PARAM_INT);
             $query->bindValue(7, $data['techData'], PDO::PARAM_INT);
+            $query->bindValue(8, $data['allowedIP'], PDO::PARAM_INT);
             $query->execute();
         }
         catch(PDOException $e)
@@ -53,13 +54,14 @@ class tabUsers extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, firstname = ?, lastname = ?, salesData = ? , techData = ? where email = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET username = ?, firstname = ?, lastname = ?, salesData = ? , techData = ?, allowedIP = ? where email = ? ');
             $query->bindValue(1, $data['username'], PDO::PARAM_STR);
             $query->bindValue(2, $data['firstname'], PDO::PARAM_STR);
             $query->bindValue(3, $data['lastname'], PDO::PARAM_STR);
             $query->bindValue(4, $data['salesData'], PDO::PARAM_INT);
             $query->bindValue(5, $data['techData'], PDO::PARAM_INT);
-            $query->bindValue(6, $data['email'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['allowedIP'], PDO::PARAM_STR);
+            $query->bindValue(7, $data['email'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -87,7 +89,7 @@ class tabUsers extends dbTable
 
     public function login($username, $password){
         try {
-            $query = $this->conn->prepare("SELECT username, email, firstname, lastname, salesData, techData, token, tokenExpire FROM " . $this->tabName. " where ( username = ? or email = ? ) and password = ?");
+            $query = $this->conn->prepare("SELECT username, email, firstname, lastname, salesData, techData, token, tokenExpire, allowedIP FROM " . $this->tabName. " where ( username = ? or email = ? ) and password = ?");
             $query->bindValue(1, $username, PDO::PARAM_STR);
             $query->bindValue(2, $username, PDO::PARAM_STR);
             $query->bindValue(3, $password, PDO::PARAM_STR);
@@ -96,7 +98,11 @@ class tabUsers extends dbTable
                 throw new Exception('Chybně zadaný uživatel nebo heslo.');
             }
             $data = $query->fetch(PDO::FETCH_OBJ);
-
+            if ($data->allowedIP != null and $data->allowedIP != "") {
+                if ($_SERVER['REMOTE_ADDR'] != $data->allowedIP){
+                    throw new Exception('IP adresa není povolená pro vzdálený přístup');
+                }
+            }
             $data->token = bin2hex(openssl_random_pseudo_bytes(8)); //generate a random token
             $data->tokenExpire = date('Y-m-d H:i:s', strtotime('+1 hour'));//the expiration date will be in one hour from the current moment
             //$data->tokenExpire = date('Y-m-d H:i:s');//the expiration date will be in one hour from the current moment

@@ -73,6 +73,7 @@ include './app/routes/offersDocuments.php';
 include './app/routes/orders.php';
 include './app/routes/ordersDocuments.php';
 include './app/routes/ordersTasks.php';
+include './app/routes/ordersCentTasks.php';
 include './app/routes/ordersSubs.php';
 include './app/routes/ordersSubsDetail.php';
 include './app/routes/tasks.php';

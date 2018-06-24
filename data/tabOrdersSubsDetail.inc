@@ -13,11 +13,18 @@ class tabOrdersSubsDetail extends dbTable
     protected $tabName = 'orderssubsdetail';
     protected $vName = 'v_orderssubsdetail';
 
+
+    public function readAll(){
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->vName );
+        $query->execute();
+        return $query;
+    }
+
     /**
      * @param $idsub
      * @return PDOStatement
      */
-    public function readAll($idorder){
+    public function readOrd($idorder){
         $query = $this->conn->prepare('SELECT * FROM ' . $this->vName. ' where idorder = ?' );
         $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
@@ -38,13 +45,14 @@ class tabOrdersSubsDetail extends dbTable
     function insert($data)
     {
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, idsub, taskdate, finished, price, invoice) VALUES (?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, idsub, taskdate, finished, price, invoice, planinvdate) VALUES (?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['idorder'], PDO::PARAM_STR);
             $query->bindValue(2, $data['idsub'], PDO::PARAM_INT);
             $query->bindValue(3, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(4, $data['finished'], PDO::PARAM_STR);
             $query->bindValue(5, $data['price'], PDO::PARAM_INT);
             $query->bindValue(6, $data['invoice'], PDO::PARAM_STR);
+            $query->bindValue(7, $data['planinvdate'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -61,12 +69,13 @@ class tabOrdersSubsDetail extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, finished = ?, price = ?, invoice = ?  where idsubdetail = ?');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, finished = ?, price = ?, invoice = ?, planinvdate = ?  where idsubdetail = ?');
             $query->bindValue(1, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(2, $data['finished'], PDO::PARAM_STR);
             $query->bindValue(3, $data['price'], PDO::PARAM_INT);
             $query->bindValue(4, $data['invoice'], PDO::PARAM_STR);
-            $query->bindValue(5, $data['idsubdetail'], PDO::PARAM_INT);
+            $query->bindValue(5, $data['planinvdate'], PDO::PARAM_STR);
+            $query->bindValue(6, $data['idsubdetail'], PDO::PARAM_INT);
             $query->execute();
         }
         catch(PDOException $e)

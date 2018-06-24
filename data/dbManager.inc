@@ -13,34 +13,15 @@ class dbManager{
     private $username = "";
     private $password = "";
 
-    /*private $host = "localhost";
-    private $db_name = "id4307761_en";
-    private $username = "id4307761_jirka";
-    private $password = "jirka";
-    private $conn;*/
-
     public function __construct(){
-        if ($_SERVER['SERVER_NAME'] === "jiribonczek.000webhostapp.com"){
-            $this->host = "localhost";
-            $this->db_name = "id4307761_en";
-            $this->username = "id4307761_jirka";
-            $this->password = "jirka";
-        }elseif ($_SERVER['SERVER_NAME'] === "XXXXnz.atris.cz"){
-            $this->host = "uvdb36.active24.cz";
-            $this->db_name = "nzatriscztest";
-            $this->username = "nzatriscztest";
-            $this->password = "8AaRYzt0NE";
-        }elseif ($_SERVER['SERVER_NAME'] === "nz.atris.cz"){
-            $this->host = "uvdb36.active24.cz";
-            $this->db_name = "nzatriscz";
-            $this->username = "nzatriscz";
-            $this->password = "WU3euMLu";
-        }else{
-            $this->host = "localhost";
-            $this->db_name = "nz_db";
-            $this->username = "jirka";
-            $this->password = "jirka";
-        }
+        //$settings = include(__DIR__ . '/../home/settings.php');
+        $settings = include(dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'home/settings.php');
+        $settingsDB = $settings['settings']['db'];
+        $this->host = $settingsDB['host'];
+        $this->db_name = $settingsDB['dbname'];
+        $this->username = $settingsDB['user'];
+        $this->password = $settingsDB['pass'];
+
     }
 
     // get the dbManager connection
