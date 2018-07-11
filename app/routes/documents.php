@@ -11,17 +11,14 @@ use \Psr\Http\Message\ResponseInterface as Response;
 
 include_once './data/tabDocuments.inc';
 
-$app->get('/documents', function (Request $request, Response $response, array $args) {
+$app->get('/docs', function (Request $request, Response $response, array $args) {
     try {
-    $tabDocuments = new tabDocuments();
-    $stmt = $tabDocuments->readAll();
-    $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    //$response->setStatus(200);
-    //$response->headers->set('Content-Type', 'application/json');
-    $response->getBody()->write(json_encode($data));
-    //$response->write(json_encode($data));
+        $tabDocuments = new tabDocuments();
+        $stmt = $tabDocuments->readAll();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($data));
         return $response->withHeader('Content-Type', 'application/json')
-            ->withStatus(200, 'OK');
+                        ->withStatus(200, 'OK');
     }
     catch(Exception $e)
     {
@@ -31,7 +28,7 @@ $app->get('/documents', function (Request $request, Response $response, array $a
     }
 });
 
-$app->post('/documents', function (Request $request, Response $response, array $args) {
+$app->post('/documents/update', function (Request $request, Response $response, array $args) {
     try {
     $json = $request->getBody();
     $data = json_decode($json, true); // parse the JSON into an assoc. array

@@ -14,21 +14,17 @@ class dbManager{
     private $password = "";
 
     public function __construct(){
-        //$settings = include(__DIR__ . '/../home/settings.php');
         $settings = include(dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'home/settings.php');
         $settingsDB = $settings['settings']['db'];
         $this->host = $settingsDB['host'];
         $this->db_name = $settingsDB['dbname'];
         $this->username = $settingsDB['user'];
         $this->password = $settingsDB['pass'];
-
     }
 
     // get the dbManager connection
     public function getConnection(){
-
         $this->conn = null;
-
         try{
             $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);  // To turn on error mode for debugging errors

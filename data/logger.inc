@@ -24,10 +24,10 @@ class LoggerMiddleware
      */
     public function __invoke($request, $response, $next)
     {
-        $logger = new logger();
         $json = $request->getBody();
         if ($request->isPost()) {
             try {
+                $logger = new logger();
                 $logger->insert($json, "");
             }
             catch(Exception $e)
@@ -40,6 +40,7 @@ class LoggerMiddleware
         }
         $response = $next($request, $response);
         if ($response->getStatusCode() != 200 ){
+            $logger = new logger();
             $response->getBody()->rewind();
             $body = $response->getBody()->getContents();
             $logger->insert($json, $body );
@@ -54,6 +55,10 @@ class logger extends dbTable
 
     public function insert($json, $message = null)
     {
+        if (is_null($this->conn)) {
+            return;
+        }
+
         try {
 
             // Check message

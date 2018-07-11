@@ -14,6 +14,7 @@ class tabDocuments extends dbTable
 
     public function readAll(){
         try {
+            //$querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName;
             $querystr = "SELECT id, type, filename, description, expiration FROM " . $this->tabName . " where type <>'' ";
             $stmt = $this->read_data($querystr);
             return $stmt;
