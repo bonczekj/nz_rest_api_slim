@@ -35,6 +35,9 @@ $app->post('/configuration/setdb', function (Request $request, Response $respons
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $settings = include(dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'home/settings.php');
+        if ($data['seccode'] <> $settings['settings']['seccode']) {
+            throw new Exception('Chybný bezpečnostní kód. ');
+        }
         $settingsDB = $settings['settings']['db'];
         $settingsDB['host'] = $data['host'];
         $settingsDB['dbname'] = $data['dbname'];
