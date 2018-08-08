@@ -121,6 +121,7 @@ class tabOffers extends dbTable
     {
         try {
             $tabOrders = new tabOrders();
+            $data['id'] = '';
             $newOrder = $tabOrders->insert($data);
 
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET idorder = ? where id = ? ');
