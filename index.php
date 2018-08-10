@@ -80,5 +80,6 @@ include './app/routes/tasks.php';
 include './app/routes/login.php';
 include './app/routes/centers.php';
 include './app/routes/configurations.php';
+include './app/routes/log.php';
 
 $app->run();

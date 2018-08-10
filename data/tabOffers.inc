@@ -18,12 +18,12 @@ class tabOffers extends dbTable
         try {
             if ($searchValue) {
                 $searchValue = '%'.$searchValue.'%';
-                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers . " where ( id like ? or name like ? or customer like ?)");
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers . " where ( id like ? or name like ? or customer like ?) order by id");
                 $stmt->bindValue(1, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(2, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(3, $searchValue, PDO::PARAM_STR);
             }else{
-                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers);
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_offers . " order by id");
             }
             $stmt->execute();
             return $stmt;
@@ -58,9 +58,14 @@ class tabOffers extends dbTable
         }
     }
 
-    function insert($name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function insert($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
     {
-        $id = $this->getID();
+        if ($id != ''){
+            $id = $id;
+        }else {
+            $id = $this->getID();
+        }
+        //$id = $this->getID();
         try {
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $id, PDO::PARAM_STR);

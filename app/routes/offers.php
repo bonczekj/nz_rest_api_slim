@@ -81,7 +81,7 @@ $app->post('/offers/create', function (Request $request, Response $response, arr
 
     $data = json_decode($json, true); // parse the JSON into an assoc. array
     $tabOffers = new tabOffers();
-        $tabOffers->insert( $data['name'], $data['ico'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );
+        $tabOffers->insert( $data['id'], $data['name'], $data['ico'], $data['processdate'], $data['processtime'], $data['deliverytype'], $data['errand'], $data['winprice'], $data['price'] );
         return $response->withHeader('Content-Type', 'application/json')
                         ->withStatus(200, 'OK');
     }

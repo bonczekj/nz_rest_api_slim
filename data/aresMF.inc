@@ -77,7 +77,9 @@ class aresMF
             'dic' => $this->ares_dic_fin,
             //'type' => $this->getTypeFromXML($xml),
             'status'  => $this->ares_stav_fin,
-            'server_name'  => $_SERVER['SERVER_NAME']
+            'server_name'  => $_SERVER['SERVER_NAME'],
+            'aresfile' => $file,
+            'aresurl' => "http://wwwinfo.mfcr.cz/cgi-bin/ares/darv_bas.cgi?ico=".$this->ico,
         );
         return $address;
     }

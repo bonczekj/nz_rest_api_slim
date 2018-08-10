@@ -110,7 +110,9 @@ $app->post('/customers/ares', function (Request $request, Response $response, ar
         $dataAres = $tabCustomers->readAres( $data['ico']);
         if ($dataAres['name'] == ''){
             $modifiedBody = $response->getBody();
-            $modifiedBody->write($dataAres['status']);
+            //$modifiedBody->write($dataAres['status']);
+            $modifiedBody->write($dataAres['aresfile']);
+            $modifiedBody->write($dataAres['aresurl']);
             return $response->withBody($modifiedBody)->withStatus(460, $dataAres['status'])
                             ->withHeader('Content-Type', 'text/html')
                             ->withHeader('charset', 'utf-8');
