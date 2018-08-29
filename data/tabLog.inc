@@ -14,7 +14,7 @@ class tabLog extends dbTable
     protected $viewName = 'v_log';
 
     public function read(){
-        $querystr = 'SELECT * FROM '. $this->viewName .' LIMIT 10000 ';
+        $querystr = 'SELECT * FROM '. $this->viewName .' LIMIT 1000 ';
         $stmt = $this->read_data($querystr);
         return $stmt;
     }
