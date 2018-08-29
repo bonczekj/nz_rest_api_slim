@@ -14,7 +14,13 @@ class tabLog extends dbTable
     protected $viewName = 'v_log';
 
     public function read(){
-        $querystr = 'SELECT * FROM '. $this->viewName .' LIMIT 500 ';
+        $querystr = 'SELECT * FROM '. $this->viewName .' LIMIT 10000 ';
+        $stmt = $this->read_data($querystr);
+        return $stmt;
+    }
+
+    public function read_CRUD(){
+        $querystr = "SELECT * FROM ". $this->viewName ." where request_uri like '%/create%' or request_uri like '%/update%' or request_uri like '%/fileupload%' order by log_id desc LIMIT 1000 ";
         $stmt = $this->read_data($querystr);
         return $stmt;
     }

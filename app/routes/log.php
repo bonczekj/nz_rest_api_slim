@@ -28,6 +28,23 @@ $app->get('/getlog', function (Request $request, Response $response, array $args
     }
 });
 
+$app->get('/getlogCRUD', function (Request $request, Response $response, array $args) {
+    try {
+        $tabLog = new tabLog();
+        $stmt = $tabLog->read_CRUD();
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $response->getBody()->write(json_encode($data));
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'OK');
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+
 $app->get('/getlogerrors', function (Request $request, Response $response, array $args) {
     try {
         $tabLog = new tabLog();
