@@ -58,7 +58,7 @@ class tabOffers extends dbTable
         }
     }
 
-    function insert($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function insert($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $delivered)
     {
         if ($id != ''){
             $id = $id;
@@ -67,7 +67,7 @@ class tabOffers extends dbTable
         }
         //$id = $this->getID();
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price, delivered ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
             $query->bindValue(3, $ico, PDO::PARAM_STR);
@@ -77,6 +77,7 @@ class tabOffers extends dbTable
             $query->bindValue(7, $errand, PDO::PARAM_STR);
             $query->bindValue(8, $winprice, PDO::PARAM_INT);
             $query->bindValue(9, $price, PDO::PARAM_INT);
+            $query->bindValue(10, $delivered, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -86,10 +87,10 @@ class tabOffers extends dbTable
         }
     }
 
-    function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price)
+    function update($id, $name, $ico, $processdate, $processtime, $deliverytype, $errand, $winprice, $price, $delivered)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ?, delivered = ? where id = ? ');
             $query->bindValue(1, $name, PDO::PARAM_STR);
             $query->bindValue(2, $ico, PDO::PARAM_STR);
             $query->bindValue(3, $processdate, PDO::PARAM_STR);
@@ -98,7 +99,8 @@ class tabOffers extends dbTable
             $query->bindValue(6, $errand, PDO::PARAM_STR);
             $query->bindValue(7, $winprice, PDO::PARAM_INT);
             $query->bindValue(8, $price, PDO::PARAM_INT);
-            $query->bindValue(9, $id, PDO::PARAM_STR);
+            $query->bindValue(9, $delivered, PDO::PARAM_STR);
+            $query->bindValue(10, $id, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
