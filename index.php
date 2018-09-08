@@ -81,5 +81,6 @@ include './app/routes/login.php';
 include './app/routes/centers.php';
 include './app/routes/configurations.php';
 include './app/routes/log.php';
+include './app/routes/SQLmodify.php';
 
 $app->run();
