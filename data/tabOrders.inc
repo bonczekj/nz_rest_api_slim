@@ -20,12 +20,13 @@ class tabOrders extends dbTable
             $archiveInt = $archive ? 1 : 0;
             if ($searchValue) {
                 $searchValue = '%'.$searchValue.'%';
-                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? and ( id like ? or name like ? or customer like ? or status like ?) order by id");
+                $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? and ( id like ? or name like ? or customer like ? or status like ? or custid like ?) order by id");
                 $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
                 $stmt->bindValue(2, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(3, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(4, $searchValue, PDO::PARAM_STR);
                 $stmt->bindValue(5, $searchValue, PDO::PARAM_STR);
+                $stmt->bindValue(6, $searchValue, PDO::PARAM_STR);
             }else{
                 $stmt = $this->conn->prepare("SELECT * FROM " . $this->v_OrdersAll . " where archive = ? order by id");
                 $stmt->bindValue(1, $archiveInt, PDO::PARAM_INT);
@@ -128,7 +129,7 @@ class tabOrders extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ?, idcenter = ?, status = ?  where id = ? ');
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ?, idcenter = ?, status = ?, custid = ?  where id = ? ');
             $query->bindValue(1, $data['name'], PDO::PARAM_STR);
             $query->bindValue(2, $data['ico'], PDO::PARAM_STR);
             $query->bindValue(3, $data['processdate'], PDO::PARAM_STR);
@@ -143,7 +144,8 @@ class tabOrders extends dbTable
             $query->bindValue(12, $data['archive'], PDO::PARAM_INT);
             $query->bindValue(13, $data['idcenter'], PDO::PARAM_STR);
             $query->bindValue(14, $data['status'], PDO::PARAM_STR);
-            $query->bindValue(15, $data['id'], PDO::PARAM_STR);
+            $query->bindValue(15, $data['custid'], PDO::PARAM_STR);
+            $query->bindValue(16, $data['id'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -157,6 +159,21 @@ class tabOrders extends dbTable
     {
         try {
             $query = $this->conn->prepare('DELETE FROM ' . $this->tabName . ' where id = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            $query = $this->conn->prepare('DELETE FROM orderscenttasks where idorder = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            $query = $this->conn->prepare('DELETE FROM ordersdocuments where idorder = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            $query = $this->conn->prepare('DELETE FROM orderssubs where idorder = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            $query = $this->conn->prepare('DELETE FROM orderssubsdetail where idorder = ?');
+            $query->bindParam(1, $id, PDO::PARAM_STR);
+            $query->execute();
+            $query = $this->conn->prepare('DELETE FROM orderstasks where idorder = ?');
             $query->bindParam(1, $id, PDO::PARAM_STR);
             $query->execute();
         }

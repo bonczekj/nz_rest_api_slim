@@ -38,36 +38,120 @@ class dbModify extends dbTable
         }
     }
 
-    public function dbupdate()
-    {
+    private function  offersUpdate_01(){
         if (!$this->existTableColumn( 'offers', 'delivered' )){
             $upd01 = "ALTER TABLE offers " .
-                     "ADD COLUMN delivered VARCHAR(5) NULL AFTER archiv";
+                "ADD COLUMN delivered VARCHAR(5) NULL AFTER archiv";
             $this->alterDB($upd01);
 
             $upd02 = "CREATE OR REPLACE VIEW v_offers AS ".
-                     "SELECT ".
-                     "offers.id AS id, ".
-                        "offers.name AS name, ".
-                        "offers.ico AS ico, ".
-                        "customers.name AS customer, ".
-                        "offers.processdate AS processdate, ".
-                        "offers.processtime AS processtime, ".
-                        "offers.deliverytype AS deliverytype, ".
-                        "offers.errand AS errand, ".
-                        "offers.winprice AS winprice, ".
-                        "offers.price AS price, ".
-                        "offers.idorder AS idorder, ".
-                        "offers.delivered AS delivered, ".
-                        "orders.name AS nameorder, ".
-                        "orders.archive AS archive ".
-                    "FROM ".
-                    "((offers ".
-                        "LEFT JOIN orders ON ((offers.idorder = orders.id))) ".
-                        "LEFT JOIN customers ON ((offers.ico = customers.ico))) ".
-                    "ORDER BY offers.id ";
+                "SELECT ".
+                "offers.id AS id, ".
+                "offers.name AS name, ".
+                "offers.ico AS ico, ".
+                "customers.name AS customer, ".
+                "offers.processdate AS processdate, ".
+                "offers.processtime AS processtime, ".
+                "offers.deliverytype AS deliverytype, ".
+                "offers.errand AS errand, ".
+                "offers.winprice AS winprice, ".
+                "offers.price AS price, ".
+                "offers.idorder AS idorder, ".
+                "offers.delivered AS delivered, ".
+                "orders.name AS nameorder, ".
+                "orders.archive AS archive ".
+                "FROM ".
+                "((offers ".
+                "LEFT JOIN orders ON ((offers.idorder = orders.id))) ".
+                "LEFT JOIN customers ON ((offers.ico = customers.ico))) ".
+                "ORDER BY offers.id ";
             $this->alterDB($upd02);
         }
+    }
+
+    private function  ordersUpdate_01(){
+        if (!$this->existTableColumn( 'orders', 'custid' )){
+            $upd01 = "ALTER TABLE orders " .
+                "ADD COLUMN custid VARCHAR(50) NULL AFTER status";
+            $this->alterDB($upd01);
+        }
+
+            $upd02 = "CREATE OR REPLACE VIEW v_orders AS ".
+                "SELECT ".
+                "orders.id AS id, ".
+                "orders.name AS name, ".
+                "orders.ico AS ico, ".
+                "customers.name AS customer, ".
+                "orders.processdate AS processdate, ".
+                "orders.processtime AS processtime, ".
+                "orders.deliverytype AS deliverytype, ".
+                "orders.errand AS errand, ".
+                "orders.winprice AS winprice, ".
+                "orders.price AS price, ".
+                "orders.idoffer AS idoffer, ".
+                "orders.price_w AS price_w, ".
+                "orders.price_d AS price_d, ".
+                "orders.price_r AS price_r, ".
+                "orders.archive AS archive, ".
+                "orders.archiveloc AS archiveloc, ".
+                "orders.idcenter AS idcenter, ".
+                "orders.status AS status, ".
+                "orders.custid AS custid, ".
+                "(SELECT SUM(orderssubsdetail.price) FROM orderssubsdetail ".
+                    "WHERE (orderssubsdetail.idorder = orders.id)) AS subs ".
+            "FROM (orders LEFT JOIN customers ON ((orders.ico = customers.ico))) ".
+            "ORDER BY orders.id";
+
+            $this->alterDB($upd02);
+
+            $upd03 = "CREATE OR REPLACE VIEW v_orders_all AS ".
+                     "SELECT ".
+                    "orders.id AS id, ".
+                    "orders.name AS name, ".
+                    "orders.ico AS ico, ".
+                    "customers.name AS customer, ".
+                    "orders.processdate AS processdate, ".
+                    "orders.processtime AS processtime, ".
+                    "orders.deliverytype AS deliverytype, ".
+                    "orders.errand AS errand, ".
+                    "orders.winprice AS winprice, ".
+                    "orders.price AS price, ".
+                    "IFNULL(orders.price_w, 0) AS price_w, ".
+                    "IFNULL(orders.price_d, 0) AS price_d, ".
+                    "IFNULL(orders.price_r, 0) AS price_r, ".
+                    "orders.archive AS archive, ".
+                    "orders.archiveloc AS archiveloc, ".
+                    "orders.idcenter AS idcenter, ".
+                    "orders.status AS status, ".
+                    "orders.custid AS custid, ".
+                    "offers.id AS idoffer, ".
+                    "offers.name AS idofferdesc, ".
+                    "IFNULL((SELECT SUM(orderssubsdetail.price) FROM orderssubsdetail ".
+                                "WHERE ((orderssubsdetail.idorder = orders.id) ".
+                                    "AND (orderssubsdetail.invoice = true))), ".
+                            "0) AS price_s, ".
+                    "IFNULL((SELECT SUM(orderssubsdetail.price) FROM orderssubsdetail ".
+                                "WHERE (orderssubsdetail.idorder = orders.id)), ".
+                            "0) AS price_s_pl, ".
+                    "IFNULL((SELECT SUM(orderstasks.price) FROM orderstasks ".
+                                "WHERE ((orderstasks.idorder = orders.id) ".
+                                    "AND (orderstasks.invoice = true))), ".
+                            "0) AS price_c, ".
+                    "IFNULL((SELECT SUM(orderstasks.price) FROM orderstasks ".
+                                "WHERE (orderstasks.idorder = orders.id)), ".
+                            "0) AS price_c_pl ".
+                    "FROM ((orders LEFT JOIN offers ON ((offers.idorder = orders.id))) ".
+                        "LEFT JOIN customers ON ((orders.ico = customers.ico))) ".
+                    "ORDER BY orders.id";
+
+            $this->alterDB($upd03);
+        //}
+    }
+
+    public function dbupdate()
+    {
+        //offersUpdate_01();
+        $this->ordersUpdate_01();
     }
 
 
