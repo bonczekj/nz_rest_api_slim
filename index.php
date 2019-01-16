@@ -16,6 +16,7 @@ $container = new \Slim\Container;
 //$container['upload_directory'] = dirname(getcwd()).'\documents';
 //$container['upload_directory'] = __DIR__ . '../../home/documents/';
 $container['upload_directory'] = dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'documents';
+$container['backup_directory'] = dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'backup';
 //$container['upload_directory'] = dirname(dirname(getcwd())).'/home/documents';
 $app = new \Slim\App($container);
 

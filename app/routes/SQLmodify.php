@@ -26,3 +26,18 @@ $app->post('/dbupdate', function (Request $request, Response $response, array $a
     }
 });
 
+$app->post('/dbbackup', function (Request $request, Response $response, array $args) {
+    try {
+        $dbManager = new dbManager();
+        $dbManager->createBackup($this->get('backup_directory'));
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'Saved');
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
+

@@ -35,5 +35,21 @@ class dbManager{
         }
         return $this->conn;
     }
+
+    public function createBackup($directory){
+        if (!file_exists($directory) && !is_dir($directory)) {
+            mkdir($directory);
+        }
+        $toDay = date('Ymd-H-i-s');
+        $file = $directory.DIRECTORY_SEPARATOR.$this->db_name."_".$toDay.".sqldump";
+        $cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
+        if ($this->host = 'localhost'){
+            $cmd = "\"c:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump\" --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
+        }else{
+            $cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
+        }
+        //exec($cmd);
+        passthru($cmd);
+    }
 }
 ?>
