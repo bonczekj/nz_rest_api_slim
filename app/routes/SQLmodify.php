@@ -28,8 +28,9 @@ $app->post('/dbupdate', function (Request $request, Response $response, array $a
 
 $app->post('/dbbackup', function (Request $request, Response $response, array $args) {
     try {
+        $directory = $this->get('backup_directory');
         $dbManager = new dbManager();
-        $dbManager->createBackup($this->get('backup_directory'));
+        $dbManager->createBackup($directory);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'Saved');
     }
@@ -41,3 +42,25 @@ $app->post('/dbbackup', function (Request $request, Response $response, array $a
     }
 });
 
+$app->post('/dbbackuplist', function (Request $request, Response $response, array $args) {
+    try {
+        $directory = $this->get('backup_directory');
+
+        $f = scandir($directory);
+        $files = array_slice(scandir($directory),2);
+
+        $size = array();
+        foreach($files as $value) {
+            echo $value." ".filesize($directory.DIRECTORY_SEPARATOR.$value).'<br/>';
+        }
+
+        return $response->withHeader('Content-Type', 'application/json')
+            ->withStatus(200, 'Saved');
+    }
+    catch(Exception $e)
+    {
+        $response->getBody()->write($e->getMessage());
+        return $response->withHeader('Content-Type', 'text/plain')
+            ->withStatus(460, 'Error');
+    }
+});
