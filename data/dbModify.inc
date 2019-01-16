@@ -148,10 +148,18 @@ class dbModify extends dbTable
         //}
     }
 
+    private function ordersUpdate_archiv(){
+        $upd = "UPDATE orders SET archive='0';";
+        $this->alterDB($upd);
+        $upd = "UPDATE orders SET archive='1' WHERE status = 'Archív';";
+        $this->alterDB($upd);
+    }
+
     public function dbupdate()
     {
         //offersUpdate_01();
-        $this->ordersUpdate_01();
+        //$this->ordersUpdate_01();
+        $this->ordersUpdate_archiv();
     }
 
 

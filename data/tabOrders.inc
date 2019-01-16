@@ -82,7 +82,12 @@ class tabOrders extends dbTable
             $id = $this->getID();
         }
         try {
-            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price, idoffer, idcenter, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+            $archiv = 0;
+            if ($data['status'] == 'Archív'){
+                $archiv = 1;
+            }
+
+            $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (id, name, ico, processdate, processtime, deliverytype, errand, winprice, price, idoffer, idcenter, status, archive) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
 
             /*$query->bindValue(1, $id, PDO::PARAM_STR);
             $query->bindValue(2, $name, PDO::PARAM_STR);
@@ -111,6 +116,7 @@ class tabOrders extends dbTable
             $query->bindValue(10, $data['idoffer'], PDO::PARAM_STR);
             $query->bindValue(11, $data['idcenter'], PDO::PARAM_STR);
             $query->bindValue(12, $data['status'], PDO::PARAM_STR);
+            $query->bindValue(13, $archiv, PDO::PARAM_STR);
             $query->execute();
 
             $query1 = $this->conn->prepare("SELECT * FROM " . $this->tabName . " where id = ?");
@@ -129,7 +135,11 @@ class tabOrders extends dbTable
     function update($data)
     {
         try {
-            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ?, idcenter = ?, status = ?, custid = ?  where id = ? ');
+            $archiv = 0;
+            if ($data['status'] == 'Archív'){
+                $archiv = 1;
+            }
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET name = ?, ico = ?, processdate = ?, processtime = ?, deliverytype = ?, errand = ?, winprice = ?, price = ? , price_w = ? , price_d = ? , price_r = ?, archive = ?, idcenter = ?, status = ?, custid = ?, archive = ?  where id = ? ');
             $query->bindValue(1, $data['name'], PDO::PARAM_STR);
             $query->bindValue(2, $data['ico'], PDO::PARAM_STR);
             $query->bindValue(3, $data['processdate'], PDO::PARAM_STR);
@@ -145,7 +155,8 @@ class tabOrders extends dbTable
             $query->bindValue(13, $data['idcenter'], PDO::PARAM_STR);
             $query->bindValue(14, $data['status'], PDO::PARAM_STR);
             $query->bindValue(15, $data['custid'], PDO::PARAM_STR);
-            $query->bindValue(16, $data['id'], PDO::PARAM_STR);
+            $query->bindValue(16, $archiv, PDO::PARAM_INT);
+            $query->bindValue(17, $data['id'], PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
