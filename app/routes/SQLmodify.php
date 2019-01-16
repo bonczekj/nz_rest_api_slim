@@ -30,7 +30,7 @@ $app->post('/dbbackup', function (Request $request, Response $response, array $a
     try {
         $directory = $this->get('backup_directory');
         $dbManager = new dbManager();
-        $dbManager->createBackup($directory);
+        echo $dbManager->createBackup($directory);
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'Saved');
     }
