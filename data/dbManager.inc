@@ -45,16 +45,15 @@ class dbManager{
         $cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
         if ($this->host = 'localhost'){
             $cmd = "\"c:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump\" --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
-            $cmd = "\"c:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump\" --user=$this->username --password=$this->password --host=$this->host $this->db_name --result-file=\"$file\"";
+            //$cmd = "\"c:\Program Files\MySQL\MySQL Server 5.7\bin\mysqldump\" --user=$this->username --password=$this->password --host=$this->host $this->db_name --result-file=\"$file\"";
         }else{
             $cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name > $file";
-            $cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name --result-file=\"$file\"";
+            //$cmd = "mysqldump --user=$this->username --password=$this->password --host=$this->host $this->db_name --result-file=\"$file\"";
         }
         //exec($cmd);
-        //passthru($cmd);
-        $cmdresult = exec($cmd);
-        return $cmdresult;
-        //return exec('mysqldump --host '. $host .' --user '. $user .' --password '. $password .' '. $database .' --result-file='.targetFilePath) === 0;
+        passthru($cmd);
+        //passthru($cmd, $cmdresult);
+        //return $cmdresult;
     }
 }
 ?>
