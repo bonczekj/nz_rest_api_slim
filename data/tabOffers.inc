@@ -48,7 +48,8 @@ class tabOffers extends dbTable
             $query->execute();
             $data = $query->fetchAll(PDO::FETCH_ASSOC);
             $lastID = (int) substr ( $data[0]["id"], 4);
-            $newID = date('Y').sprintf( '%02d', $lastID + 1 );
+            //$newID = date('Y').sprintf( '%02d', $lastID + 1 );
+            $newID = (int)$data[0]["id"] + 1;
             return $newID;
         }
         catch(PDOException $e)
