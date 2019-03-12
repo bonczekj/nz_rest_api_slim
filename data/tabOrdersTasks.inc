@@ -24,11 +24,14 @@ class tabOrdersTasks extends dbTable
     function insert($data)
     {
         try {
+            if (empty($data['planinvdate'])){
+                $data['planinvdate'] = null;
+            }
             $query = $this->conn->prepare('INSERT INTO ' . $this->tabName . ' (idorder, taskdate, taskdesc, finished, price, invoice, note, planinvdate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
             $query->bindValue(1, $data['idorder'], PDO::PARAM_STR);
             $query->bindValue(2, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(3, $data['taskdesc'], PDO::PARAM_STR);
-            $query->bindValue(4, $data['finished'], PDO::PARAM_INT);
+            $query->bindValue(4, $data['finished'], PDO::PARAM_STR);
             $query->bindValue(5, $data['price'], PDO::PARAM_INT);
             $query->bindValue(6, $data['invoice'], PDO::PARAM_STR);
             $query->bindValue(7, $data['note'], PDO::PARAM_STR);
@@ -46,10 +49,13 @@ class tabOrdersTasks extends dbTable
     function update($data)
     {
         try {
+            if (empty($data['planinvdate'])){
+                $data['planinvdate'] = null;
+            }
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' set taskdate = ?, taskdesc = ?, finished = ?, price = ?, invoice = ?, note = ?, planinvdate = ? where idtask = ? and idorder = ?');
             $query->bindValue(1, $data['taskdate'], PDO::PARAM_STR);
             $query->bindValue(2, $data['taskdesc'], PDO::PARAM_STR);
-            $query->bindValue(3, $data['finished'], PDO::PARAM_INT);
+            $query->bindValue(3, $data['finished'], PDO::PARAM_STR);
             $query->bindValue(4, $data['price'], PDO::PARAM_INT);
             $query->bindValue(5, $data['invoice'], PDO::PARAM_STR);
             $query->bindValue(6, $data['note'], PDO::PARAM_STR);
