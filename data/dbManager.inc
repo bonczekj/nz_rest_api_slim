@@ -14,7 +14,7 @@ class dbManager{
     private $password = "";
 
     public function __construct(){
-        $settings = include(dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'home/settings.php');
+        $settings = include(dirname(dirname(getcwd())). DIRECTORY_SEPARATOR.'home'.DIRECTORY_SEPARATOR.'settings.php');
         $settingsDB = $settings['settings']['db'];
         $this->host = $settingsDB['host'];
         $this->db_name = $settingsDB['dbname'];
