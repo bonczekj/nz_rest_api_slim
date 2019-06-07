@@ -148,6 +148,51 @@ class dbModify extends dbTable
         //}
     }
 
+    private function  v_orders_all_Update_02(){
+        $upd = "CREATE OR REPLACE VIEW v_orders_all AS ".
+            "SELECT ".
+            "orders.id AS id, ".
+            "orders.name AS name, ".
+            "orders.ico AS ico, ".
+            "customers.name AS customer, ".
+            "orders.processdate AS processdate, ".
+            "orders.processtime AS processtime, ".
+            "orders.deliverytype AS deliverytype, ".
+            "orders.errand AS errand, ".
+            "orders.winprice AS winprice, ".
+            "orders.price AS price, ".
+            "IFNULL(orders.price_w, 0) AS price_w, ".
+            "IFNULL(orders.price_d, 0) AS price_d, ".
+            "IFNULL(orders.price_r, 0) AS price_r, ".
+            "orders.archive AS archive, ".
+            "orders.archiveloc AS archiveloc, ".
+            "orders.idcenter AS idcenter, ".
+            "orders.status AS status, ".
+            "orders.custid AS custid, ".
+            "offers.id AS idoffer, ".
+            "offers.name AS idofferdesc, ".
+            "IFNULL((SELECT SUM(orderssubsdetail.price) FROM orderssubsdetail ".
+            "WHERE ((orderssubsdetail.idorder = orders.id) ".
+            "AND (orderssubsdetail.invoice = 'true'))), ".
+            "0) AS price_s, ".
+            "IFNULL((SELECT SUM(orderssubsdetail.price) FROM orderssubsdetail ".
+            "WHERE (orderssubsdetail.idorder = orders.id)), ".
+            "0) AS price_s_pl, ".
+            "IFNULL((SELECT SUM(orderstasks.price) FROM orderstasks ".
+            "WHERE ((orderstasks.idorder = orders.id) ".
+            "AND (orderstasks.invoice = 'true'))), ".
+            "0) AS price_c, ".
+            "IFNULL((SELECT SUM(orderstasks.price) FROM orderstasks ".
+            "WHERE (orderstasks.idorder = orders.id)), ".
+            "0) AS price_c_pl ".
+            "FROM ((orders LEFT JOIN offers ON ((offers.idorder = orders.id))) ".
+            "LEFT JOIN customers ON ((orders.ico = customers.ico))) ".
+            "ORDER BY orders.id";
+
+        $this->alterDB($upd);
+    }
+
+
     private function ordersUpdate_archiv(){
         $upd = "UPDATE orders SET archive='0';";
         $this->alterDB($upd);
@@ -159,7 +204,8 @@ class dbModify extends dbTable
     {
         //offersUpdate_01();
         //$this->ordersUpdate_01();
-        $this->ordersUpdate_archiv();
+        //$this->ordersUpdate_archiv();
+        $this->v_orders_all_Update_02();
     }
 
 }
