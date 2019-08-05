@@ -200,12 +200,37 @@ class dbModify extends dbTable
         $this->alterDB($upd);
     }
 
+    private function v_ordersSubDetails_Update_01(){
+        $upd = "CREATE OR REPLACE VIEW v_orderssubsdetail AS ".
+        "SELECT ".
+        "orderssubsdetail.idsubdetail AS  idsubdetail,".
+        "orderssubsdetail.idorder AS  idorder,".
+        "orderssubsdetail.idsub AS  idsub,".
+        "orderssubsdetail.taskdate AS  taskdate,".
+        "orderssubsdetail.finished AS  finished,".
+        "orderssubsdetail.price AS  price,".
+        "orderssubsdetail.invoice AS  invoice,".
+        "orderssubsdetail.planinvdate AS  planinvdate,".
+        "orders.name AS  order_name,".
+        "customers.ico AS  ico,".
+        "customers.name AS  name,".
+        "customers.mobil AS  mobil,".
+        "customers.email AS  email ".
+        "FROM ".
+        "(orderssubsdetail ".
+            "JOIN orderssubs ON (orderssubsdetail.idsub = orderssubs.idsub)".
+            "JOIN customers ON (orderssubs.ico = customers.ico)".
+            "JOIN orders ON (orderssubsdetail.idorder = orders.id) );";
+        $this->alterDB($upd);
+    }
+
     public function dbupdate()
     {
         //offersUpdate_01();
         //$this->ordersUpdate_01();
         //$this->ordersUpdate_archiv();
-        $this->v_orders_all_Update_02();
+        //$this->v_orders_all_Update_02();
+        $this->v_ordersSubDetails_Update_01();
     }
 
 }
