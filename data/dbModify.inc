@@ -248,6 +248,24 @@ class dbModify extends dbTable
         $this->alterDB($upd);
     }
 
+    private function v_orderscenttasks_Update_01(){
+        $upd = "CREATE OR REPLACE VIEW v_orderscenttasks AS ".
+            "SELECT ".
+            "orderscenttasks.idtask as idtask, ".
+            "orderscenttasks.idorder as idorder, ".
+            "orderscenttasks.taskdate as taskdate, ".
+            "orderscenttasks.taskcentdesc as taskcentdesc, ".
+            "orderscenttasks.finished as finished, ".
+            "orderscenttasks.idcenter as idcenter, ".
+            "centers.person as person, ".
+            "orders.name AS order_name ".
+            "FROM ".
+            "(orderscenttasks ".
+            "LEFT JOIN centers ON (orderscenttasks.idcenter = centers.idcenter) ".
+            "JOIN orders ON (orderscenttasks.idorder = orders.id) )";
+        $this->alterDB($upd);
+    }
+
     public function dbupdate()
     {
         //offersUpdate_01();
@@ -256,6 +274,7 @@ class dbModify extends dbTable
         //$this->v_orders_all_Update_02();
         //$this->v_ordersSubDetails_Update_01();
         //$this->v_ordersTasks_Update_01();
+        $this->v_orderscenttasks_Update_01();
     }
 
 }

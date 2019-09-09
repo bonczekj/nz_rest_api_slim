@@ -115,12 +115,27 @@ class tabUsers extends dbTable
         }
     }
 
-    private  function  updateToken($email, $token, $tokenExpire){
+    private function updateToken($email, $token, $tokenExpire){
         try {
             $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET token = ?, tokenExpire = ? where email = ? ');
             $query->bindValue(1, $token, PDO::PARAM_STR);
             $query->bindValue(2, $tokenExpire);
             $query->bindValue(3, $email, PDO::PARAM_STR);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+
+    }
+
+    private function extendToken($token){
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET tokenExpire = ? where token = ? ');
+            $query->bindValue(1, date('Y-m-d H:i:s', strtotime('+1 hour')));//the expiration date will be in one hour from the current moment);
+            $query->bindValue(2, $token, PDO::PARAM_STR);
             $query->execute();
         }
         catch(PDOException $e)
@@ -170,6 +185,33 @@ class tabUsers extends dbTable
         {
             throw new Exception('Chyba při ukládání: '.$e->getMessage());
         }
+    }
+
+    public function isTokenValid($token){
+        try {
+            $query = $this->conn->prepare("SELECT username, tokenExpire FROM " . $this->tabName. " where token = ? ");
+            $query->bindValue(1, $token, PDO::PARAM_STR);
+            $query->execute();
+            if ($query->rowCount() == 0){
+                return 1;
+                //throw new Exception('Chybně zadaný uživatel nebo heslo.');
+            }
+            $data = $query->fetch(PDO::FETCH_OBJ);
+            if ($data->tokenExpire != "") {
+                $now = date('Y-m-d H:i:s', strtotime('now'));;
+                if ($data->tokenExpire < $now){
+                    return 2;
+                }
+            }
+            $data->tokenExpire = date('Y-m-d H:i:s', strtotime('+1 hour'));//the expiration date will be in one hour from the current moment
+            $this->extendToken($token);
+            return 0;
+        }
+        catch(PDOException $e)
+        {
+            throw new Exception('Chyba při přihlášení: '.$e->getMessage());
+        }
+
     }
 // test
 }
