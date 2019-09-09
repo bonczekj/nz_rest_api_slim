@@ -33,8 +33,24 @@ $authError = function($request, $response, TokenAuthentication $tokenAuth) {
     return $response->withJson($output, 401);
 };
 
+use Slim\Middleware\TokenAuthentication\TokenSearch;
 $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenAuth){
-    $token = $tokenAuth->findToken($request);
+
+    //$token = $tokenAuth->findToken($request);
+    if ($request->hasHeader('Authorization')) {
+        $token = '';
+        $header = $request->getHeader('Authorization')[0];
+        if (preg_match('/Bearer\s+(.*)$/i', $header, $matches)) {
+            $token = $matches[1];
+        }
+    }
+
+    if ($token == ''){
+        $logger = new logger();
+        $logger->insert($request, 'Nenalezen token');
+        return;
+    }
+
     $tabUsers = new tabUsers();
     $tokenStatus = $tabUsers->isTokenValid($token);
     if ($tokenStatus == 1){
@@ -47,7 +63,7 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
         {
             $logger->insert('', $e->getMessage());
         }
-        throw new MyUnauthorizedException();
+        //throw new MyUnauthorizedException();
     }elseif ($tokenStatus == 2){
         $tokenAuth->setResponseMessage('Vypršel časový limit přihlášení');
         //throw new \Slim\Middleware\TokenAuthentication\TokenNotFoundException('Vypršel časový limit přihlášení', 2);
@@ -59,7 +75,7 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
         {
             $logger->insert('', $e->getMessage());
         }
-        throw new MyUnauthorizedException();
+        //throw new MyUnauthorizedException();
     }
 };
 
