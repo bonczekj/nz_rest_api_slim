@@ -34,7 +34,7 @@ $authError = function($request, $response, TokenAuthentication $tokenAuth) {
 };
 
 use Slim\Middleware\TokenAuthentication\TokenSearch;
-$authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenAuth){
+$authenticator = function(Request $request, \Slim\Middleware\TokenAuthentication $tokenAuth){
 
     //$token = $tokenAuth->findToken($request);
     if ($request->hasHeader('Authorization')) {
@@ -47,35 +47,34 @@ $authenticator = function($request, \Slim\Middleware\TokenAuthentication $tokenA
 
     if ($token == ''){
         $logger = new logger();
-        $logger->insert($request, 'Nenalezen token');
-        return;
-    }
-
-    $tabUsers = new tabUsers();
-    $tokenStatus = $tabUsers->isTokenValid($token);
-    if ($tokenStatus == 1){
-        $tokenAuth->setResponseMessage('Neoprávněné přihlášení');
-        try {
-            $logger = new logger();
-            $logger->insert(json_encode($token), 'Neoprávněné přihlášení');
+        $logger->insert(json_encode($request->getUri()->getPath()) , 'Nenalezen token');
+    }else{
+            $tabUsers = new tabUsers();
+        $tokenStatus = $tabUsers->isTokenValid($token);
+        if ($tokenStatus == 1){
+            $tokenAuth->setResponseMessage('Neoprávněné přihlášení');
+            try {
+                $logger = new logger();
+                $logger->insert(json_encode($token), 'Neoprávněné přihlášení');
+            }
+            catch(Exception $e)
+            {
+                $logger->insert('', $e->getMessage());
+            }
+            //throw new MyUnauthorizedException();
+        }elseif ($tokenStatus == 2){
+            $tokenAuth->setResponseMessage('Vypršel časový limit přihlášení');
+            //throw new \Slim\Middleware\TokenAuthentication\TokenNotFoundException('Vypršel časový limit přihlášení', 2);
+            try {
+                $logger = new logger();
+                $logger->insert(json_encode($token), 'Vypršel časový limit přihlášení');
+            }
+            catch(Exception $e)
+            {
+                $logger->insert('', $e->getMessage());
+            }
+            //throw new MyUnauthorizedException();
         }
-        catch(Exception $e)
-        {
-            $logger->insert('', $e->getMessage());
-        }
-        //throw new MyUnauthorizedException();
-    }elseif ($tokenStatus == 2){
-        $tokenAuth->setResponseMessage('Vypršel časový limit přihlášení');
-        //throw new \Slim\Middleware\TokenAuthentication\TokenNotFoundException('Vypršel časový limit přihlášení', 2);
-        try {
-            $logger = new logger();
-            $logger->insert(json_encode($token), 'Vypršel časový limit přihlášení');
-        }
-        catch(Exception $e)
-        {
-            $logger->insert('', $e->getMessage());
-        }
-        //throw new MyUnauthorizedException();
     }
 };
 
