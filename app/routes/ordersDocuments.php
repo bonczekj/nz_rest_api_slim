@@ -10,6 +10,7 @@ use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 
 include_once './data/tabOrdersDocuments.inc';
+include_once './data/tabDocuments.inc';
 
 $app->post('/ordersdocuments', function (Request $request, Response $response, array $args) {
     try {
@@ -51,6 +52,8 @@ $app->post('/ordersdocuments/create', function (Request $request, Response $resp
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabDocuments = new tabDocuments();
+        $tabDocuments->setPath( $data['documentId'], $data['path']);
         $tabOrdersDocuments = new tabOrdersDocuments();
         $tabOrdersDocuments->insert($data['idorder'], $data['documentId'], $data['typeRS'], $data['ico'] );
         return $response->withHeader('Content-Type', 'application/json')
