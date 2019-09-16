@@ -50,9 +50,6 @@
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
-          <root url="file://$MODULE_DIR$/vendor/dyorg/slim-token-authentication" />
-          <root url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
-          <root url="file://$MODULE_DIR$/vendor/http-interop/http-factory" />
           <root url="file://$MODULE_DIR$/vendor/nikic/fast-route" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
@@ -68,9 +65,6 @@
           <root url="file://$MODULE_DIR$/vendor/pimple/pimple" />
           <root url="file://$MODULE_DIR$/vendor/psr/container" />
           <root url="file://$MODULE_DIR$/vendor/psr/http-message" />
-          <root url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
-          <root url="file://$MODULE_DIR$/vendor/psr/http-server-middleware" />
-          <root url="file://$MODULE_DIR$/vendor/psr/log" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/diff" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/environment" />
@@ -78,21 +72,14 @@
           <root url="file://$MODULE_DIR$/vendor/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/version" />
-          <root url="file://$MODULE_DIR$/vendor/slim/middleware" />
           <root url="file://$MODULE_DIR$/vendor/squizlabs/php_codesniffer" />
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/callable-handler" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/http-factory" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/slim-jwt-auth" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </CLASSES>
         <SOURCES>
           <root url="file://$MODULE_DIR$/vendor/composer" />
           <root url="file://$MODULE_DIR$/vendor/container-interop/container-interop" />
           <root url="file://$MODULE_DIR$/vendor/doctrine/instantiator" />
-          <root url="file://$MODULE_DIR$/vendor/dyorg/slim-token-authentication" />
-          <root url="file://$MODULE_DIR$/vendor/firebase/php-jwt" />
-          <root url="file://$MODULE_DIR$/vendor/http-interop/http-factory" />
           <root url="file://$MODULE_DIR$/vendor/nikic/fast-route" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-common" />
           <root url="file://$MODULE_DIR$/vendor/phpdocumentor/reflection-docblock" />
@@ -108,9 +95,6 @@
           <root url="file://$MODULE_DIR$/vendor/pimple/pimple" />
           <root url="file://$MODULE_DIR$/vendor/psr/container" />
           <root url="file://$MODULE_DIR$/vendor/psr/http-message" />
-          <root url="file://$MODULE_DIR$/vendor/psr/http-server-handler" />
-          <root url="file://$MODULE_DIR$/vendor/psr/http-server-middleware" />
-          <root url="file://$MODULE_DIR$/vendor/psr/log" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/comparator" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/diff" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/environment" />
@@ -118,12 +102,8 @@
           <root url="file://$MODULE_DIR$/vendor/sebastian/global-state" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/recursion-context" />
           <root url="file://$MODULE_DIR$/vendor/sebastian/version" />
-          <root url="file://$MODULE_DIR$/vendor/slim/middleware" />
           <root url="file://$MODULE_DIR$/vendor/squizlabs/php_codesniffer" />
           <root url="file://$MODULE_DIR$/vendor/symfony/yaml" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/callable-handler" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/http-factory" />
-          <root url="file://$MODULE_DIR$/vendor/tuupola/slim-jwt-auth" />
           <root url="file://$MODULE_DIR$/vendor/webmozart/assert" />
         </SOURCES>
       </library>

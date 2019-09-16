@@ -87,6 +87,7 @@ $app->post('/documents/create', function (Request $request, Response $response, 
 
 $app->post('/fileupload', function (Request $request, Response $response, array $args) {
     try {
+        $logger = new logger();
         $directory = $this->get('upload_directory');
         $files = $request->getUploadedFiles();
         foreach ($files as &$value) {
@@ -97,6 +98,8 @@ $app->post('/fileupload', function (Request $request, Response $response, array 
 
         if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
             $fileName = $uploadedFile->getClientFilename();
+            //$logger->insert(json_encode($uploadedFile->file), $uploadedFile->getStream()->getMetadata('uri'));
+            //$path = pathinfo($uploadedFile->file, PATHINFO_DIRNAME);
             $techName = moveUploadedFile($directory, $uploadedFile);
             $tabDocuments = new tabDocuments();
             $fileId = $tabDocuments->insert( '', $fileName, '', null, $techName);

@@ -11,6 +11,7 @@ use \Psr\Http\Message\ResponseInterface as Response;
 use Slim\Http\UploadedFile;
 
 include_once './data/tabOffersDocuments.inc';
+include_once './data/tabDocuments.inc';
 
 $app->post('/offersdocuments', function (Request $request, Response $response, array $args) {
     try {
@@ -52,6 +53,8 @@ $app->post('/offersdocuments/create', function (Request $request, Response $resp
     try {
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
+        $tabDocuments = new tabDocuments();
+        $tabDocuments->setPath( $data['documentId'], $data['path']);
         $tabOffersDocuments = new tabOffersDocuments();
         $tabOffersDocuments->insert($data['idoffer'], $data['documentId'], $data['typeRS'] );
         return $response->withHeader('Content-Type', 'application/json')

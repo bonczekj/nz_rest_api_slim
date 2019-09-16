@@ -85,6 +85,21 @@ class tabDocuments extends dbTable
         }
     }
 
+    function setPath($id, $path)
+    {
+        try {
+            $query = $this->conn->prepare('UPDATE ' . $this->tabName . ' SET path = ? where id = ?');
+            $query->bindParam(1, $path, PDO::PARAM_STR, 10);
+            $query->bindParam(2, $id, PDO::PARAM_INT, 10);
+            $query->execute();
+        }
+        catch(PDOException $e)
+        {
+            print "Error!: " . $e->getMessage() . "<br/>";
+            throw new Exception('Chyba při ukládání. '.$e->getMessage());
+        }
+    }
+
     function delete($id)
     {
         try {

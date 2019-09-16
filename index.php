@@ -47,7 +47,7 @@ $authenticator = function(Request $request, \Slim\Middleware\TokenAuthentication
 
     if ($token == ''){
         $logger = new logger();
-        $logger->insert(json_encode($request->getUri()->getPath()) , 'Nenalezen token');
+        $logger->insert(json_encode($request->getUri()->getPath()) , 'AUTH: Nenalezen token');
     }else{
             $tabUsers = new tabUsers();
         $tokenStatus = $tabUsers->isTokenValid($token);
@@ -55,7 +55,7 @@ $authenticator = function(Request $request, \Slim\Middleware\TokenAuthentication
             $tokenAuth->setResponseMessage('Neoprávněné přihlášení');
             try {
                 $logger = new logger();
-                $logger->insert(json_encode($token), 'Neoprávněné přihlášení');
+                $logger->insert(json_encode($token), 'AUTH: Neoprávněné přihlášení');
             }
             catch(Exception $e)
             {
@@ -67,7 +67,7 @@ $authenticator = function(Request $request, \Slim\Middleware\TokenAuthentication
             //throw new \Slim\Middleware\TokenAuthentication\TokenNotFoundException('Vypršel časový limit přihlášení', 2);
             try {
                 $logger = new logger();
-                $logger->insert(json_encode($token), 'Vypršel časový limit přihlášení');
+                $logger->insert(json_encode($token), 'AUTH: Vypršel časový limit přihlášení');
             }
             catch(Exception $e)
             {
@@ -81,7 +81,7 @@ $authenticator = function(Request $request, \Slim\Middleware\TokenAuthentication
 $app->add(new LoggerMiddleware());
 
 $app->add(new \Slim\Middleware\TokenAuthentication([
-    'path' => '/jobs',
+    'path' => '/*',
     'passthrough' => '/login',
     'authenticator' => $authenticator,
     "secure" => true,  // pro http

@@ -266,6 +266,13 @@ class dbModify extends dbTable
         $this->alterDB($upd);
     }
 
+    private function  documents_01(){
+        if (!$this->existTableColumn( 'documents', 'path' )){
+            $upd01 = "ALTER TABLE documents " .
+                "ADD COLUMN path VARCHAR(2555) NULL ";
+            $this->alterDB($upd01);
+        }
+    }
     public function dbupdate()
     {
         //offersUpdate_01();
@@ -275,6 +282,7 @@ class dbModify extends dbTable
         //$this->v_ordersSubDetails_Update_01();
         //$this->v_ordersTasks_Update_01();
         $this->v_orderscenttasks_Update_01();
+        $this->documents_01();
     }
 
 }
