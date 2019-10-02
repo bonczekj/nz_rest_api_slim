@@ -273,6 +273,24 @@ class dbModify extends dbTable
             $this->alterDB($upd01);
         }
     }
+
+    private function v_ordersDocument_01(){
+        $upd = "CREATE OR REPLACE VIEW v_ordersdocuments AS ".
+        "SELECT ".
+        "ordersdocuments.idorder as idorder, ".
+        "ordersdocuments.iddocument as iddocument, ".
+        "ordersdocuments.typeRS as typeRS, ".
+        "ordersdocuments.ico as ico, ".
+        "documents.filename as filename, ".
+        "documents.path as path, ".
+        "customers.name as name ".
+        "FROM ((ordersdocuments ".
+        "JOIN documents ON ((ordersdocuments.iddocument = documents.id))) ".
+        "LEFT JOIN customers ON ((ordersdocuments.ico = customers.ico)))";
+        $this->alterDB($upd);
+    }
+
+    
     public function dbupdate()
     {
         //offersUpdate_01();
@@ -283,6 +301,7 @@ class dbModify extends dbTable
         //$this->v_ordersTasks_Update_01();
         $this->v_orderscenttasks_Update_01();
         $this->documents_01();
+        $this->v_ordersDocument_01();
     }
 
 }
