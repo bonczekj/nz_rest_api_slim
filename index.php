@@ -82,9 +82,10 @@ $app->add(new LoggerMiddleware());
 
 $app->add(new \Slim\Middleware\TokenAuthentication([
     'path' => '/*',
-    'passthrough' => '/login',
+    //'passthrough' => '/login',
+    'passthrough' => ["/login", "/getlogerrors", "/dbupdate"],
     'authenticator' => $authenticator,
-    "secure" => true,  // pro http
+    "secure" => false,  // pro http
     //"error" => $authError
     //"relaxed" => ["localhost", "jiribonczek.000webhostapp.com"],
 ]));
