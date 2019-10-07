@@ -85,7 +85,8 @@ $app->post('/users/create', function (Request $request, Response $response, arra
         $json = $request->getBody();
         $data = json_decode($json, true); // parse the JSON into an assoc. array
         $tabUsers= new tabUsers();
-        $tabUsers->insert( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        //$tabUsers->insert( $data['username'], $data['email'], $data['password'], $data['firstname'], $data['lastname']);
+        $tabUsers->insert( $data );
         return $response->withHeader('Content-Type', 'application/json')
             ->withStatus(200, 'Created');
     }
