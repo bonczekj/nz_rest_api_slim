@@ -15,7 +15,7 @@ class tabOrdersDocuments extends dbTable
     protected $v_tabName = 'v_ordersdocuments';
 
     public function readAll($idorder){
-        $query = $this->conn->prepare('SELECT * FROM ' . $this->v_tabName. ' where idorder = ?' );
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->v_tabName. ' where idorder = ? order by path, filename' );
         $query->bindValue(1, $idorder, PDO::PARAM_STR);
         $query->execute();
         return $query;

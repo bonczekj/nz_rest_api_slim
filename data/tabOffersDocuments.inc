@@ -14,7 +14,7 @@ class tabOffersDocuments extends dbTable
     protected $tabName = 'offersdocuments';
 
     public function readAll($idoffer){
-        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ', documents where iddocument = documents.id and  idoffer = ?' );
+        $query = $this->conn->prepare('SELECT * FROM ' . $this->tabName. ', documents where iddocument = documents.id and idoffer = ? order by path, filename' );
         $query->bindValue(1, $idoffer, PDO::PARAM_INT);
         $query->execute();
         return $query;
